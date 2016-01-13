@@ -1,212 +1,135 @@
-# Prelude
+# 서론
 
-> Role models are important. <br>
-> -- Officer Alex J. Murphy / RoboCop
-
-One thing has always bothered me as a Ruby developer - Python developers have a
-great programming style reference
-([PEP-8][]) and we never got an official
-guide, documenting Ruby coding style and best practices. And I do believe that
-style matters. I also believe that a great hacker community, such as Ruby has,
-should be quite capable of producing this coveted document.
-
-This guide started its life as our internal company Ruby coding guidelines
-(written by yours truly). At some point I decided that the work I was doing
-might be interesting to members of the Ruby community in general and that the
-world had little need for another internal company guideline. But the world
-could certainly benefit from a community-driven and community-sanctioned set of
-practices, idioms and style prescriptions for Ruby programming.
-
-Since the inception of the guide I've received a lot of feedback from members of
-the exceptional Ruby community around the world. Thanks for all the suggestions
-and the support! Together we can make a resource beneficial to each and every
-Ruby developer out there.
-
-By the way, if you're into Rails you might want to check out the complementary
-[Ruby on Rails Style Guide][rails-style-guide].
-
-# The Ruby Style Guide
-
-This Ruby style guide recommends best practices so that real-world Ruby
-programmers can write code that can be maintained by other real-world Ruby
-programmers. A style guide that reflects real-world usage gets used, and a style
-guide that holds to an ideal that has been rejected by the people it is supposed
-to help risks not getting used at all &ndash; no matter how good it is.
-
-The guide is separated into several sections of related rules. I've tried to add
-the rationale behind the rules (if it's omitted I've assumed it's pretty
-obvious).
-
-I didn't come up with all the rules out of nowhere - they are mostly
-based on my extensive career as a professional software engineer,
-feedback and suggestions from members of the Ruby community and
-various highly regarded Ruby programming resources, such as
-["Programming Ruby 1.9"][pickaxe] and
-["The Ruby Programming Language"][trpl].
-
-There are some areas in which there is no clear consensus in the Ruby community
-regarding a particular style (like string literal quoting, spacing inside hash
-literals, dot position in multi-line method chaining, etc.). In such scenarios
-all popular styles are acknowledged and it's up to you to pick one and apply it
-consistently.
-
-This style guide evolves over time as additional conventions are
-identified and past conventions are rendered obsolete by changes in
-Ruby itself.
-
-Many projects have their own coding style guidelines (often derived
-from this guide). In the event of any conflicts, such
-project-specific guides take precedence for that project.
-
-You can generate a PDF or an HTML copy of this guide using
-[Transmuter][].
-
-[RuboCop][] is a code analyzer, based on this
-style guide.
-
-Translations of the guide are available in the following languages:
-
-* [Chinese Simplified](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhCN.md)
-* [Chinese Traditional](https://github.com/JuanitoFatas/ruby-style-guide/blob/master/README-zhTW.md)
-* [French](https://github.com/porecreat/ruby-style-guide/blob/master/README-frFR.md)
-* [German](https://github.com/arbox/de-ruby-style-guide/blob/master/README-deDE.md)
-* [Japanese](https://github.com/fortissimo1997/ruby-style-guide/blob/japanese/README.ja.md)
-* [Korean](https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md)
-* [Portuguese](https://github.com/rubensmabueno/ruby-style-guide/blob/master/README-PT-BR.md)
-* [Russian](https://github.com/arbox/ruby-style-guide/blob/master/README-ruRU.md)
-* [Spanish](https://github.com/alemohamad/ruby-style-guide/blob/master/README-esLA.md)
-* [Vietnamese](https://github.com/scrum2b/ruby-style-guide/blob/master/README-viVN.md)
+이 문서는 휴레이 웹 개발자를 위한 루비 코딩 스타일 가이드입니다. https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md 사이트를 참고했습니다. 코드 가독성을 우선하기 때문에 참고 사이트의 "나쁜 예"에 해당하는 스타일도 허용합니다.
 
 ## Table of Contents
 
-* [Source Code Layout](#source-code-layout)
-* [Syntax](#syntax)
-* [Naming](#naming)
-* [Comments](#comments)
-  * [Comment Annotations](#comment-annotations)
-* [Classes](#classes--modules)
-* [Exceptions](#exceptions)
-* [Collections](#collections)
-* [Strings](#strings)
-* [Regular Expressions](#regular-expressions)
-* [Percent Literals](#percent-literals)
-* [Metaprogramming](#metaprogramming)
-* [Misc](#misc)
-* [Tools](#tools)
+* [소스 코드 레이아웃](#소스-코드-레이아웃)
+* [구문](#구문)
+* [네이밍](#네이밍)
+* [주석](#주석)
+  * [주석 어노테이션](#주석-어노테이션)
+* [클래스와 모듈](#클래스와-모듈)
+* [예외](#예외)
+* [컬렉션](#컬렉션)
+* [문자열](#문자열)
+* [정규식](#정규식)
+* [퍼센트 리터럴](#퍼센트-리터럴)
+* [메타프로그래밍](#메타프로그래밍)
+* [그 밖에](#그 밖에)
+* [도구들](#도구들)
 
-## Source Code Layout
+## 소스 코드 레이아웃
 
-> Nearly everybody is convinced that every style but their own is
-> ugly and unreadable. Leave out the "but their own" and they're
-> probably right... <br>
+> 거의 모든 사람들이 자신의 것을 제외한 모든 코딩 스타일이 번잡하고 가독성이
+> 떨어진다고 확신한다. 앞 문장에서 "자신의 것을 제외한"을 없앤다면 아마도 맞는
+> 말일지도...<br>
 > -- Jerry Coffin (on indentation)
 
 * <a name="utf-8"></a>
-  Use `UTF-8` as the source file encoding.
+  소스 파일의 인코딩은 `UTF-8`을 사용하라.
 <sup>[[link](#utf-8)]</sup>
 
 * <a name="spaces-indentation"></a>
-  Use two **spaces** per indentation level (aka soft tabs). No hard tabs.
+  탭은 들여쓰기 단위별로 **공백 2칸**을 사용하라.(소프트 탭 사용) 하드 탭
+  사용 안 함
 <sup>[[link](#spaces-indentation)]</sup>
 
   ```Ruby
-  # bad - four spaces
+  # 나쁜 예 - 공백 4칸
   def some_method
       do_something
   end
 
-  # good
+  # 좋은 예
   def some_method
     do_something
   end
   ```
 
 * <a name="crlf"></a>
-  Use Unix-style line endings. (*BSD/Solaris/Linux/OS X users are covered by
-  default, Windows users have to be extra careful.)
+  Unix 스타일로 줄바꿈 하라.(*BSD/Solaris/Linux/OS X 사용자들은 기본으로 설정되어
+  있다. Windows 사용자에겐 특히 주의가 필요하다.)
 <sup>[[link](#crlf)]</sup>
 
-  * If you're using Git you might want to add the following
-    configuration setting to protect your project from Windows line
-    endings creeping in:
+  * 만약 Git을 사용하고 있으면, 다음 설정을 추가함으로써 프로젝트가 Windows
+    줄바꿈 형식으로 강제 설정되는 것을 막을 수 있을 것이다.
 
     ```bash
     $ git config --global core.autocrlf true
     ```
-
 * <a name="no-semicolon"></a>
-  Don't use `;` to separate statements and expressions. As a corollary - use one
-  expression per line.
+  두 개 이상의 명령문과 표현식을 세미콜론(;)으로 나눠쓰지 말아라. 한 줄에 한
+  개씩 쓰는 것을 권장한다.
 <sup>[[link](#no-semicolon)]</sup>
 
   ```Ruby
-  # bad
-  puts 'foobar'; # superfluous semicolon
+  # 나쁜 예
+  puts 'foobar'; # 불필요한 세미콜론
 
-  puts 'foo'; puts 'bar' # two expressions on the same line
+  puts 'foo'; puts 'bar' # 같은 줄에 표현식이 2개
 
-  # good
+  # 좋은 예
   puts 'foobar'
 
   puts 'foo'
   puts 'bar'
 
-  puts 'foo', 'bar' # this applies to puts in particular
+  puts 'foo', 'bar' # 이 경우는 puts가 두 변수 다 적용됨.
   ```
 
 * <a name="single-line-classes"></a>
-  Prefer a single-line format for class definitions with no body.
+  본문이 없는 클래스도 줄바꿈한다. (**휴레이**)
 <sup>[[link](#single-line-classes)]</sup>
 
   ```Ruby
-  # bad
+  # 허용되는 예
   class FooError < StandardError
   end
 
-  # okish
+  # 나쁘지 않은 예
   class FooError < StandardError; end
 
-  # good
+  # 좋은 예
   FooError = Class.new(StandardError)
   ```
 
 * <a name="no-single-line-methods"></a>
-  Avoid single-line methods. Although they are somewhat popular in the wild,
-  there are a few peculiarities about their definition syntax that make their
-  use undesirable. At any rate - there should be no more than one expression in
-  a single-line method.
+  한 줄짜리 메소드를 작성하지 마라. 그런 방식이 비록 현장에서 많이 쓰이긴 하지만,
+  그러한 syntax 사용법이 익숙지 않아 좋아하지 않는 경우도 있기 때문이다. 어쨌든
+  한 줄에는 하나 이상의 메소드가 표현되어선 안 된다.
 <sup>[[link](#no-single-line-methods)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def too_much; something; something_else; end
 
-  # okish - notice that the first ; is required
+  # 나쁘지 않은 예 - 처음의 ;(세미콜론)은 필요
   def no_braces_method; body end
 
-  # okish - notice that the second ; is optional
+  # 나쁘지 않은 예 - 두 번째의 ;는 선택사항
   def no_braces_method; body; end
 
-  # okish - valid syntax, but no ; makes it kind of hard to read
+  # 나쁘지 않은 예 - 문법은 맞지만, ;이 없으면 가독성이 떨어짐
   def some_method() body end
 
-  # good
+  # 좋은 예
   def some_method
     body
   end
   ```
 
-  One exception to the rule are empty-body methods.
+  본문이 비어있는 메소드는 이 규칙에서 예외다.
 
   ```Ruby
-  # good
+  # 좋은 예
   def no_op; end
   ```
 
 * <a name="spaces-operators"></a>
-  Use spaces around operators, after commas, colons and semicolons, around `{`
-  and before `}`. Whitespace might be (mostly) irrelevant to the Ruby
-  interpreter, but its proper use is the key to writing easily readable code.
+  연산자 전후, 콤마 뒤, 콜론과 세미콜론 뒤, `{`, `}`의 전후에 공백(space)을
+  써라. 공백은 루비 인터프리터에는 (대부분의 경우) 중요하지 않지만 적절하게
+  사용하면 읽기 쉬운 코드를 작성할 수 있다.
 <sup>[[link](#spaces-operators)]</sup>
 
   ```Ruby
@@ -216,81 +139,80 @@ Translations of the guide are available in the following languages:
   class FooError < StandardError; end
   ```
 
-  The only exception, regarding operators, is the exponent operator:
+  유일한 예외는 지수 연산자다.
 
   ```Ruby
-  # bad
+  # 나쁜 예
   e = M * c ** 2
 
-  # good
+  # 좋은 예
   e = M * c**2
   ```
-
-  `{` and `}` deserve a bit of clarification, since they are used
-  for block and hash literals, as well as string interpolation.
-  For hash literals two styles are considered acceptable.
+  `{`, `}` 전후의 공백은 구문을 명확하게 하기 위해 쓸 만한데, 그 이유는
+  문자열 보간법(string interpolation)을 사용할 때 뿐만 아니라 블록이나
+  해시문에 사용될 수 있기 때문이다. 해시문에서는 다음 두 가지 스타일이
+  허용된다.
 
   ```Ruby
-  # good - space after { and before }
+  # 좋은 예 - {뒤와 }앞에 공백
   { one: 1, two: 2 }
 
-  # good - no space after { and before }
+  # 좋은 예 - {뒤 와 }앞에 공백 없이
   {one: 1, two: 2}
   ```
 
-  The first variant is slightly more readable (and arguably more
-  popular in the Ruby community in general). The second variant has
-  the advantage of adding visual difference between block and hash
-  literals. Whichever one you pick - apply it consistently.
+  첫 번째 방법이 조금 더 읽기 좋다.(그리고 루비 커뮤니티에서 확실히 더 인기가
+  있다.) 두 번째 방법은 블록과 해시를 시각적으로 구별화 수 있는 장점이 있다.
+  무엇이든 하나를 선택하면, 일관적으로 적용하자.
 
 * <a name="no-spaces-braces"></a>
-  No spaces after `(`, `[` or before `]`, `)`.
+  `(`, `[`뒤 또는 `]`, `)` 앞에 공백을 넣지 않는다.
 <sup>[[link](#no-spaces-braces)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   some( arg ).other
   [ 1, 2, 3 ].size
 
-  # good
+  # 좋은 예
   some(arg).other
   [1, 2, 3].size
   ```
 
 * <a name="no-space-bang"></a>
-  No space after `!`.
+  `!` 뒤에 공백을 넣지 않는다.
 <sup>[[link](#no-space-bang)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   ! something
 
-  # good
+  # 좋은 예
   !something
   ```
 
 * <a name="no-space-inside-range-literals"></a>
-  No space inside range literals.
+  레인지문에는 공백을 넣지 않는다.
 <sup>[[link](#no-space-inside-range-literals)]</sup>
 
     ```Ruby
-    # bad
+    # 나쁜 예
     1 .. 3
     'a' ... 'z'
 
-    # good
+    # 좋은 예
     1..3
     'a'...'z'
     ```
 
 * <a name="indent-when-to-case"></a>
-  Indent `when` as deep as `case`. I know that many would disagree
-  with this one, but it's the style established in both "The Ruby
-  Programming Language" and "Programming Ruby".
+  `when`은 `case`와 같은 깊이로 들여 쓰자.
+  "The RubyProgramming Language"와 "Programming Ruby"에서 사용하는
+  스타일이다.
 <sup>[[link](#indent-when-to-case)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   case
     when song.name == 'Misty'
       puts 'Not again!'
@@ -302,7 +224,7 @@ Translations of the guide are available in the following languages:
       song.play
   end
 
-  # good
+  # 좋은 예
   case
   when song.name == 'Misty'
     puts 'Not again!'
@@ -316,12 +238,11 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="indent-conditional-assignment"></a>
-  When assigning the result of a conditional expression to a variable,
-  preserve the usual alignment of its branches.
+  조건식의 결과를 변수에 대입하는 경우, 그 가지(case)의 일반적인 정렬을 유지하라.
 <sup>[[link](#indent-conditional-assignment)]</sup>
 
   ```Ruby
-  # bad - pretty convoluted
+  # 나쁜 예 - 상당히 복잡함
   kind = case year
   when 1850..1889 then 'Blues'
   when 1890..1909 then 'Ragtime'
@@ -337,7 +258,7 @@ Translations of the guide are available in the following languages:
     calc_something_else
   end
 
-  # good - it's apparent what's going on
+  # 좋은 예 - 어떻게 돌아가는지 분명함
   kind = case year
          when 1850..1889 then 'Blues'
          when 1890..1909 then 'Ragtime'
@@ -353,7 +274,7 @@ Translations of the guide are available in the following languages:
              calc_something_else
            end
 
-  # good (and a bit more width efficient)
+  # 좋은 예(가로 폭의 효율이 약간 더 좋음)
   kind =
     case year
     when 1850..1889 then 'Blues'
@@ -373,8 +294,7 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="empty-lines-between-methods"></a>
-  Use empty lines between method definitions and also to break up a method
-  into logical paragraphs internally.
+  메소드 정의와, 단락이 논리적으로 구분될 때마다 사이에 빈줄을 넣어 분할하자.
 <sup>[[link](#empty-lines-between-methods)]</sup>
 
   ```Ruby
@@ -392,56 +312,55 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="no-trailing-params-comma"></a>
-  Avoid comma after the last parameter in a method call, especially when the
-  parameters are not on separate lines.
+  메소드 호출의 마지막 인수 뒤에 쉼표를 피한다. 인수가 여러 줄로 나누어져 있지
+  않을 때는 특히 피한다.
 <sup>[[link](#no-trailing-params-comma)]</sup>
 
   ```Ruby
-  # bad - easier to move/add/remove parameters, but still not preferred
+  # 나쁜 예 - 쉽게 인수를 이동/추가/삭제할 수 있지만 여전히 권장하진 않는다.
   some_method(
                size,
                count,
                color,
              )
 
-  # bad
+  # 나쁜 예
   some_method(size, count, color, )
 
-  # good
+  # 좋은 예
   some_method(size, count, color)
   ```
 
 * <a name="spaces-around-equals"></a>
-  Use spaces around the `=` operator when assigning default values to method
-  parameters:
+  메소드의 인수에 기본 값을 대입할 때에는, `=` 연산자 주변에 공백을 넣어라.
 <sup>[[link](#spaces-around-equals)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def some_method(arg1=:default, arg2=nil, arg3=[])
     # do something...
   end
 
-  # good
+  # 좋은 예
   def some_method(arg1 = :default, arg2 = nil, arg3 = [])
     # do something...
   end
   ```
 
-  While several Ruby books suggest the first style, the second is much more
-  prominent in practice (and arguably a bit more readable).
+  여러 루비 책들이 첫 번째 스타일을 권장하지만, 실제로는 두 번째 스타일이 좀 더
+  눈에 잘 띈다.(그리고 분명히 읽기 더 쉽다.)
 
 * <a name="no-trailing-backslash"></a>
-  Avoid line continuation `\` where not required. In practice, avoid using
-  line continuations for anything but string concatenation.
+  불필요하게 `\`로 줄을 바꾸는 것을 피하라. 실제로 프로그래밍할 때 긴 문자열을
+  자르는 경우 말고는 줄을 임의로 바꾸지 마라.
 <sup>[[link](#no-trailing-backslash)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   result = 1 - \
            2
 
-  # good (but still ugly as hell)
+  # 좋은 예(하지만 여전히 못생겼다.)
   result = 1 \
            - 2
 
@@ -450,55 +369,56 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="consistent-multi-line-chains"></a>
-    Adopt a consistent multi-line method chaining style. There are two
-    popular styles in the Ruby community, both of which are considered
-    good - leading `.` (Option A) and trailing `.` (Option B).
+    메소드 연쇄가 여러 줄에 걸쳐서 이루어질 때, 일관된 스타일을 적용하라.
+    루비에서 여러 줄에 걸친 메소드 연쇄 표현 스타일은 크게 두 가지가 있는데,
+    둘 모두 괜찮은 방식이다. `.`의 위치에 따라 선두법(leading, A방식)과
+    후방법(trailing, B방식)이 있다.
 <sup>[[link](#consistent-multi-line-chains)]</sup>
 
-  * **(Option A)** When continuing a chained method invocation on
-    another line keep the `.` on the second line.
+  * **(A방식)** 연쇄적인 메소드 호출이 서로 다른 줄에 걸쳐 연결되어 있을 때,
+    두 번째 라인에 `.`을 두라.
 
     ```Ruby
-    # bad - need to consult first line to understand second line
+    # 나쁜 예 - 두 번째 줄을 이해하기 위해서 첫 번째 라인을 찾아야 함
     one.two.three.
       four
 
-    # good - it's immediately clear what's going on the second line
+    # 좋은 예 - 두 번째 줄에서 어떤일이 일어나는지 즉시 알 수 있음
     one.two.three
       .four
     ```
 
-  * **(Option B)** When continuing a chained method invocation on another line,
-    include the `.` on the first line to indicate that the
-    expression continues.
+  * **(B방식)** 연쇄적인 메소드 호출이 서로 다른 줄에 걸쳐 연결되어 있을 때,
+    이를 명확히 하기 위해 첫 번째 줄에 `.`을 포함시켜라.
 
     ```Ruby
-    # bad - need to read ahead to the second line to know that the chain continues
+    # 나쁜 예 - 메소드 연쇄가 이어지는지 알기 위해서 다음 줄을 읽을 필요가 있음
     one.two.three
       .four
 
-    # good - it's immediately clear that the expression continues beyond the first line
+    # 좋은 예 - 메소드 연쇄가 다음줄에서 이어지는지 한눈에 알 수 있음
     one.two.three.
       four
     ```
 
-  A discussion on the merits of both alternative styles can be found
-  [here](https://github.com/bbatsov/ruby-style-guide/pull/176).
+  양 쪽 스타일의 장점에 대한 논의는
+  [여기](https://github.com/bbatsov/ruby-style-guide/pull/176)에서 볼 수 있다.
 
 * <a name="no-double-indent"></a>
-    Align the parameters of a method call if they span more than one
-    line. When aligning parameters is not appropriate due to line-length
-    constraints, single indent for the lines after the first is also
-    acceptable.
+    메소드 호출이 여러 줄에 걸쳐 일어날 경우 인수들을 적절히 정렬하라.
+    라인 길이 제한으로 인수들을 정렬하기 어려울 때에는 두 번째 인수부터 한 칸
+    들여쓰기를(single indent) 하되, 이 때 첫 번째 인수가 들여쓰기 이전에 줄바꿈이
+    없었는지 확인해야 된다.(아래 세 번째 예에서 to:'bob@example.com' (첫 번째
+    인수)의 줄이 넘어가면 네 번째 예처럼 작성하면 된다.)
 <sup>[[link](#no-double-indent)]</sup>
 
   ```Ruby
-  # starting point (line is too long)
+  # 처음 상태(줄이 너무 길다)
   def send_mail(source)
     Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
   end
 
-  # bad (double indent)
+  # 나쁜 예(들여쓰기 두번)
   def send_mail(source)
     Mailer.deliver(
         to: 'bob@example.com',
@@ -507,7 +427,7 @@ Translations of the guide are available in the following languages:
         body: source.text)
   end
 
-  # good
+  # 좋은 예
   def send_mail(source)
     Mailer.deliver(to: 'bob@example.com',
                    from: 'us@example.com',
@@ -515,7 +435,7 @@ Translations of the guide are available in the following languages:
                    body: source.text)
   end
 
-  # good (normal indent)
+  # 좋은 예(보통의 들여쓰기)
   def send_mail(source)
     Mailer.deliver(
       to: 'bob@example.com',
@@ -527,86 +447,85 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="align-multiline-arrays"></a>
-  Align the elements of array literals spanning multiple lines.
+  여러 줄에 걸친 배열 요소들을 정리하라.
 <sup>[[link](#align-multiline-arrays)]</sup>
 
   ```Ruby
-  # bad - single indent
+  # 나쁜 예 - 단일 들여쓰기
   menu_item = ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
 
-  # good
+  # 좋은 예
   menu_item = [
     'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
   ]
 
-  # good
+  # 좋은 예
   menu_item =
     ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
      'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
   ```
 
 * <a name="underscores-in-numerics"></a>
-  Add underscores to large numeric literals to improve their readability.
+  너무 큰 숫자는 밑줄을 이용하면 가독성이 좋아진다.
 <sup>[[link](#underscores-in-numerics)]</sup>
 
   ```Ruby
-  # bad - how many 0s are there?
+  # 나쁜 예 - 0이 몇 개나 됩니까?
   num = 1000000
 
-  # good - much easier to parse for the human brain
+  # 좋은 예 - 사람이 해석하기에도 훨씬 쉽다.
   num = 1_000_000
   ```
 
 * <a name="rdoc-conventions"></a>
-    Use RDoc and its conventions for API documentation.  Don't put an
-    empty line between the comment block and the `def`.
+  RDoc과 API 문서의 컨벤션을 이용하라.
+  `def`와 명령 블록 사이에 빈 줄을 넣지 마라.
 <sup>[[link](#rdoc-conventions)]</sup>
 
 * <a name="80-character-limits"></a>
-  Limit lines to 80 characters.
+  한 행에는 80자까지만 쓴다.
 <sup>[[link](#80-character-limits)]</sup>
 
 * <a name="no-trailing-whitespace"></a>
-  Avoid trailing whitespace.
+  줄 끝의 공백은 피한다.
 <sup>[[link](#no-trailing-whitespace)]</sup>
 
 * <a name="newline-eof"></a>
-  End each file with a newline.
+  모든 파일 끝에 줄바꿈을 넣는다.
 <sup>[[link](#newline-eof)]</sup>
 
 * <a name="no-block-comments"></a>
-    Don't use block comments. They cannot be preceded by whitespace and are not
-    as easy to spot as regular comments.
+  블록 형태의 주석을 사용하지 마라. 앞에 공백이 들어가면 작동하지 않고, 일반
+  주석과 달리 쉽게 발견하기 어렵다.
 <sup>[[link](#no-block-comments)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   =begin
   comment line
   another comment line
   =end
 
-  # good
+  # 좋은 예
   # comment line
   # another comment line
   ```
 
-## Syntax
+## 구문
 
 * <a name="double-colons"></a>
-    Use `::` only to reference constants(this includes classes and
-    modules) and constructors (like `Array()` or `Nokogiri::HTML()`).
-    Do not use `::` for regular method invocation.
+  `::`는 상수(클래스나 모듈 포함)와 생성자(`Array()` 또는 `Nokogiri::HTML()`
+  같은)를 참조할 때만 사용하라. 일반 메소드 호출에서는 `::`를 쓰지 마라.
 <sup>[[link](#double-colons)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   SomeClass::some_method
   some_object::some_method
 
-  # good
+  # 좋은 예
   SomeClass.some_method
   some_object.some_method
   SomeModule::SomeClass::SOME_CONST
@@ -614,40 +533,40 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="method-parens"></a>
-    Use `def` with parentheses when there are parameters. Omit the
-    parentheses when the method doesn't accept any parameters.
+  매개변수가 있을 때 `def`와 괄호를 함께 사용하라. 받을 매개변수가 없을 때에는
+  괄호를 제거하라.
 <sup>[[link](#method-parens)]</sup>
 
    ```Ruby
-   # bad
+   # 나쁜 예
    def some_method()
      # body omitted
    end
 
-   # good
+   # 좋은 예
    def some_method
      # body omitted
    end
 
-   # bad
+   # 나쁜 예
    def some_method_with_parameters param1, param2
      # body omitted
    end
 
-   # good
+   # 좋은 예
    def some_method_with_parameters(param1, param2)
      # body omitted
    end
    ```
 
 * <a name="optional-arguments"></a>
-    Define optional arguments at the end of the list of arguments.
-    Ruby has some unexpected results when calling methods that have
-    optional arguments at the front of the list.
+    선택적인 인자는 인자 목록의 마지막에 선언한다.
+    루비에서 선택적인 인자를 목록 앞쪽에 사용하면 의도치 않은 결과를 반환할 수
+    있다.
 <sup>[[link](#optional-arguments)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def some_method(a = 1, b = 2, c, d)
     puts "#{a}, #{b}, #{c}, #{d}"
   end
@@ -656,7 +575,7 @@ Translations of the guide are available in the following languages:
   some_method('w', 'x', 'y') # => 'w, 2, x, y'
   some_method('w', 'x', 'y', 'z') # => 'w, x, y, z'
 
-  # good
+  # 좋은 예
   def some_method(c, d, a = 1, b = 2)
     puts "#{a}, #{b}, #{c}, #{d}"
   end
@@ -667,25 +586,24 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="parallel-assignment"></a>
-    Avoid the use of parallel assignment for defining variables. Parallel
-    assignment is allowed when it is the return of a method call, used with
-    the splat operator, or when used to swap variable assignment. Parallel
-    assignment is less readable than separate assignment.
+    변수를 선언할 때 병렬 대입(parallel assignment)을 피한다. 병렬 대입은 메소드
+    호출의 결과일 때, 스플랫 연산자와 사용할 때, 변수를 교환 대입할 때 사용한다.
+    병렬 대입은 일반 대입에 비해 가독성이 떨어진다.
 <sup>[[link](#parallel-assignment)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   a, b, c, d = 'foo', 'bar', 'baz', 'foobar'
 
-  # good
+  # 좋은 예
   a = 'foo'
   b = 'bar'
   c = 'baz'
   d = 'foobar'
 
-  # good - swapping variable assignment
-  # Swapping variable assignment is a special case because it will allow you to
-  # swap the values that are assigned to each variable.
+  # 좋은 예 - 변수 교환 대입
+  # 변수 교환 대입은 특별한 경우다.
+  # 각 변수에 대입된 값을 교환할 수 있기 때문이다.
   a = 'foo'
   b = 'bar'
 
@@ -693,77 +611,105 @@ Translations of the guide are available in the following languages:
   puts a # => 'bar'
   puts b # => 'foo'
 
-  # good - method return
+  # 좋은 예 - 메소드 반환
   def multi_return
     [1, 2]
   end
 
   first, second = multi_return
 
-  # good - use with splat
-  first, *list = [1,2,3,4]
+  # 좋은 예 - 스플랫과 함께 사용
+  first, *list = [1, 2, 3, 4]
 
-  hello_array = *"Hello"
+  hello_array = *'Hello'
 
   a = *(1..3)
   ```
 
+* <a name="trailing-underscore-variables"></a>
+  병렬 대입할 때 불필요한 뒤의 밑줄 변수를 피하라. 이름 있는 밑줄 변수는
+  문맥을 읽는데 도움이 되기 떄문에 밑줄 변수보다 권장된다.  뒤의 밑줄 변수는
+  대입의 왼쪽에 스프렛 변수가 정의 되고 스프렛 변수가 밑줄이 아닐 때만 필요하다.
+<sup>[[link]](#trailing-underscore-variables)</sup>
+
+  ```Ruby
+  # 나쁜 예
+  foo = 'one,two,three,four,five'
+  # 유용한 정보가 아닌 불필요한 대입
+  first, second, _ = foo.split(',')
+  first, _, _ = foo.split(',')
+  first, *_ = foo.split(',')
+
+  # 좋은 예
+  foo = 'one,two,three,four,five'
+  # 밑줄 변수는 마지막 밑줄 요소를 재외한 전 요소를 가져오고 싶다는걸 보여주기
+  # 위해 필요하다.
+  *beginning, _ = foo.split(',')
+  *beginning, something, _ = foo.split(',')
+
+  a, = foo.split(',')
+  a, b, = foo.split(',')
+  # 사용하지 않는 변수에 불필요한 대입이지만, 유용한 정보를 제공한다.
+  first, _second = foo.split(',')
+  first, _second, = foo.split(',')
+  first, *_ending = foo.split(',')
+  ```
+
 * <a name="no-for-loops"></a>
-    Do not use `for`, unless you know exactly why. Most of the time iterators
-    should be used instead. `for` is implemented in terms of `each` (so
-    you're adding a level of indirection), but with a twist - `for`
-    doesn't introduce a new scope (unlike `each`) and variables defined
-    in its block will be visible outside it.
+  `for`을 쓸 때에는 정확히 그 용법을 알고 있을 때에만 사용해야 한다. 대부분
+  반복자(iterator)가 `for` 대신 사용된다. `for` 구문은 `each`의 관점에서
+  실행되기 때문에 일종의 우회적인 방식을 사용하지만, `each` 용법과는 다른 점이
+  있다. 즉, `for`는 `each`와는 다르게 새로운 영역을 생성하는 것이 아니기 때문에,
+  `for` 구문 내부에서 정의된 변수들은 `for` 외부에서도 접근 가능하다.
 <sup>[[link](#no-for-loops)]</sup>
 
   ```Ruby
   arr = [1, 2, 3]
 
-  # bad
+  # 나쁜 예
   for elem in arr do
     puts elem
   end
 
-  # note that elem is accessible outside of the for loop
+  # elem은 for문 밖에서도 접근 가능한 것에 주의
   elem # => 3
 
-  # good
+  # 좋은 예
   arr.each { |elem| puts elem }
 
-  # elem is not accessible outside each's block
+  # elem을 each블록 밖에서는 접근할 수 없음
   elem # => NameError: undefined local variable or method `elem'
   ```
 
 * <a name="no-then"></a>
-  Do not use `then` for multi-line `if/unless`.
+  `if/unless`문의 내용이 여러 줄일 때에는 `then`을 쓰지 마라.
 <sup>[[link](#no-then)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   if some_condition then
     # body omitted
   end
 
-  # good
+  # 좋은 예
   if some_condition
     # body omitted
   end
   ```
 
 * <a name="same-line-condition"></a>
-  Always put the condition on the same line as the `if`/`unless` in a
-  multi-line conditional.
+  조건문의 내용이 여러 줄일 때, 조건식은 항상 `if/unless`와 같은 줄에 붙여 써라.
 <sup>[[link](#same-line-condition)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   if
     some_condition
     do_something
     do_something_else
   end
 
-  # good
+  # 좋은 예
   if some_condition
     do_something
     do_something_else
@@ -771,63 +717,59 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="ternary-operator"></a>
-  Favor the ternary operator(`?:`) over `if/then/else/end` constructs.
-  It's more common and obviously more concise.
+  `if/then/else/end` 구문 보다, 삼항 연산자(`?:`)를 더욱 선호한다. 그게 좀 더
+  명쾌하고 간결하다.
 <sup>[[link](#ternary-operator)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   result = if some_condition then something else something_else end
 
-  # good
+  # 좋은 예
   result = some_condition ? something : something_else
   ```
 
 * <a name="no-nested-ternary"></a>
-  Use one expression per branch in a ternary operator. This
-  also means that ternary operators must not be nested. Prefer
-  `if/else` constructs in these cases.
+  삼항 연산자는 하나의 식마다 한 개의 표현식을 쓴다. 즉, 삼항 연산자는 중첩해서
+  써서는 안 된다. 그러한 경우는 `if/else` 구문을 사용하는 것이 좋다.
 <sup>[[link](#no-nested-ternary)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   some_condition ? (nested_condition ? nested_something : nested_something_else) : something_else
 
-  # good
+  # 좋은 예
   if some_condition
     nested_condition ? nested_something : nested_something_else
   else
     something_else
   end
   ```
-
 * <a name="no-semicolon-ifs"></a>
-  Do not use `if x; ...`. Use the ternary
-  operator instead.
+  `if x; ...`는 사용하지마라. 대신 삼항 연산자를 사용하라.
 <sup>[[link](#no-semicolon-ifs)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   result = if some_condition; something else something_else end
 
-  # good
+  # 좋은 예
   result = some_condition ? something : something_else
   ```
 
 * <a name="use-if-case-returns"></a>
-  Leverage the fact that `if` and `case` are expressions which return a
-  result.
+  `if`와 `case`은 결과를 반환하는 표현식이라는 사실을 이용하라.
 <sup>[[link](#use-if-case-returns)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   if condition
     result = x
   else
     result = y
   end
 
-  # good
+  # 좋은 예
   result =
     if condition
       x
@@ -837,108 +779,106 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="one-line-cases"></a>
-  Use `when x then ...` for one-line cases. The alternative syntax `when x:
-  ...` has been removed as of Ruby 1.9.
+  하나의 행의 경우에는 `when x then ...`을 이용하라. 대안인 `when x:...`는 루비
+  1.9에서 없어졌다.
 <sup>[[link](#one-line-cases)]</sup>
 
 * <a name="no-when-semicolons"></a>
-  Do not use `when x; ...`. See the previous rule.
+  `when x; ...`문을 사용하지마라. 앞서 말한 규칙을 보라.
 <sup>[[link](#no-when-semicolons)]</sup>
 
 * <a name="bang-not-not"></a>
-  Use `!` instead of `not`.
+  `not`보다는 `!`를 사용하라.
 <sup>[[link](#bang-not-not)]</sup>
 
   ```Ruby
-  # bad - braces are required because of op precedence
+  # 나쁜 예 - 연산자 우선순위에 의해 소괄호가 요구됨
   x = (not something)
 
-  # good
+  # 좋은 예
   x = !something
   ```
 
 * <a name="no-bang-bang"></a>
-  Avoid the use of `!!`.
+  `!!`의 사용은 피하라
 <sup>[[link](#no-bang-bang)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   x = 'test'
-  # obscure nil check
+  # 불분명한 nil 체크
   if !!x
-    # body omitted
+    # body 생략
   end
 
   x = false
-  # double negation is useless on booleans
+  # 이중 부정은 boolean타입에서 무용함
   !!x # => false
 
-  # good
+  # 좋은 예
   x = 'test'
   unless x.nil?
-    # body omitted
+    # body 생략
   end
   ```
 
 * <a name="no-and-or-or"></a>
-  The `and` and `or` keywords are banned. It's just not worth it. Always use
-  `&&` and `||` instead.
+  `and`와 `or`, `&&`와 `||`은 혼용 가능하다. (**휴레이**)
 <sup>[[link](#no-and-or-or)]</sup>
 
   ```Ruby
-  # bad
-  # boolean expression
+  # 나쁜 예
+  # boolean 식
   if some_condition and some_other_condition
     do_something
   end
 
-  # control flow
+  # 제어문
   document.saved? or document.save!
 
-  # good
-  # boolean expression
+  # 좋은 예
+  # boolean 식
   if some_condition && some_other_condition
     do_something
   end
 
-  # control flow
+  # 제어문
   document.saved? || document.save!
   ```
 
 * <a name="no-multiline-ternary"></a>
-  Avoid multi-line `?:` (the ternary operator); use `if/unless` instead.
+  여러 줄의 조건문에는 `?:`(삼항 연산자)를 피하라. 대신 `if/unless`를 사용하라.
 <sup>[[link](#no-multiline-ternary)]</sup>
 
 * <a name="if-as-a-modifier"></a>
-  Favor modifier `if/unless` usage when you have a single-line body. Another
-  good alternative is the usage of control flow `&&/||`.
+  구문이 한 줄일 때에는, 같은 줄 끝에 `if/unless`를 사용하는 것이 좋다.
+  또 다른 좋은 표현방법은 `&&/||`과 같은 제어문을 쓰는 것이다.
 <sup>[[link](#if-as-a-modifier)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   if some_condition
     do_something
   end
 
-  # good
+  # 좋은 예
   do_something if some_condition
 
-  # another good option
+  # 또 다른 좋은 예
   some_condition && do_something
   ```
 
 * <a name="no-multiline-if-modifiers"></a>
-  Avoid modifier `if/unless` usage at the end of a non-trivial multi-line
-  block.
+  간단하지 않고 여러 줄에 걸친 구문 블록에는 한 줄 `if/unless`를 피하라.
 <sup>[[link](#no-multiline-if-modifiers)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   10.times do
     # multi-line body omitted
   end if some_condition
 
-  # good
+  # 좋은 예
   if some_condition
     10.times do
       # multi-line body omitted
@@ -946,37 +886,50 @@ Translations of the guide are available in the following languages:
   end
   ```
 
+* <a name="no-nested-modifiers"></a>
+  중첩된 `if/unless/while/until` 조건의 사용을 피하라. 적절하게 `&&/||`를
+  사용하라.
+<sup>[[link](#no-nested-modifiers)]</sup>
+
+  ```Ruby
+  # 나쁜 예
+  do_something if other_condition if some_condition
+
+  # 좋은 예
+  do_something if some_condition && other_condition
+  ```
+
 * <a name="unless-for-negatives"></a>
-  Favor `unless` over `if` for negative conditions (or control flow `||`).
+  `if` 뒤의 부정적인 조건보다는 `unless`(나 `||`)가 더 좋다.
 <sup>[[link](#unless-for-negatives)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   do_something if !some_condition
 
-  # bad
+  # 나쁜 예
   do_something if not some_condition
 
-  # good
+  # 좋은 예
   do_something unless some_condition
 
-  # another good option
+  # 또 다른 좋은 방법
   some_condition || do_something
   ```
 
 * <a name="no-else-with-unless"></a>
-  Do not use `unless` with `else`. Rewrite these with the positive case first.
+  `unless`에는 `else`를 쓰지 마라. 긍정적인 경우가 앞에 오도록 다시 작성하라.
 <sup>[[link](#no-else-with-unless)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   unless success?
     puts 'failure'
   else
     puts 'success'
   end
 
-  # good
+  # 좋은 예
   if success?
     puts 'success'
   else
@@ -985,30 +938,28 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="no-parens-if"></a>
-  Don't use parentheses around the condition of an `if/unless/while/until`.
+  한 개의 `if/unless/while/until` 구문의 조건식 앞뒤에는 괄호를 사용하지 마라.
 <sup>[[link](#no-parens-if)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   if (x > 10)
     # body omitted
   end
 
-  # good
+  # 좋은 예
   if x > 10
     # body omitted
   end
   ```
 
-Note that there is an exception to this rule, namely [safe assignment in
-condition](#safe-assignment-in-condition).
-
 * <a name="no-multiline-while-do"></a>
-  Do not use `while/until condition do` for multi-line `while/until`.
+  `while/until` 문의 내용이 여러 줄일 때에는, `while/until condition do`를 쓰지
+  마라.
 <sup>[[link](#no-multiline-while-do)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   while x > 5 do
     # body omitted
   end
@@ -1017,7 +968,7 @@ condition](#safe-assignment-in-condition).
     # body omitted
   end
 
-  # good
+  # 좋은 예
   while x > 5
     # body omitted
   end
@@ -1028,37 +979,37 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="while-as-a-modifier"></a>
-  Favor modifier `while/until` usage when you have a single-line body.
+  구문이 한 줄일 때에는, 같은 줄 끝에 `while/until`를 쓰는 것이 좋다.
 <sup>[[link](#while-as-a-modifier)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   while some_condition
     do_something
   end
 
-  # good
+  # 좋은 예
   do_something while some_condition
   ```
 
 * <a name="until-for-negatives"></a>
-  Favor `until` over `while` for negative conditions.
+  `while`에 부정적인 조건을 쓰기보단 `until`을 쓰는 것이 좋다.
 <sup>[[link](#until-for-negatives)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   do_something while !some_condition
 
-  # good
+  # 좋은 예
   do_something until some_condition
   ```
 
 * <a name="infinite-loop"></a>
-  Use `Kernel#loop` instead of `while/until` when you need an infinite loop.
+  무한 반복문이 필요할 때에는, `while/until`보다 `Kernel#loop`를 쓰는 것이 더 좋다.
 <sup>[[link](#infinite-loop)]</sup>
 
     ```ruby
-    # bad
+    # 나쁜 예
     while true
       do_something
     end
@@ -1067,25 +1018,25 @@ condition](#safe-assignment-in-condition).
       do_something
     end
 
-    # good
+    # 좋은 예
     loop do
       do_something
     end
     ```
 
 * <a name="loop-with-break"></a>
-  Use `Kernel#loop` with `break` rather than `begin/end/until` or
-  `begin/end/while` for post-loop tests.
+  종결조건을 나중에 판정하는 반복문을 쓸 때, `begin/end/until` 또는
+  `begin/end/while`보다는 `Kernel#loop`와 `break`를 사용하라.
 <sup>[[link](#loop-with-break)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   begin
     puts val
     val += 1
   end while val < 0
 
-  # good
+  # 좋은 예
   loop do
     puts val
     val += 1
@@ -1094,10 +1045,11 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="no-dsl-parens"></a>
-  Omit parentheses around parameters for methods that are part of an internal
-  DSL (e.g. Rake, Rails, RSpec), methods that have "keyword" status in Ruby
-  (e.g. `attr_reader`, `puts`) and attribute access methods. Use parentheses
-  around the arguments of all other method invocations.
+  메소드가 다음 세 가지인 경우 매개변수를 감싸는 괄호를 생략하라.
+  1. 내장 DSL(예를 들어 Rake, 레일즈, RSpec 등)의 일부인 메소드
+  2. 루비에서 "키워드" 역할을 하고 있는 메소드(예를 들어 `attr_reader`, `puts`)
+  3. attribute 접근 메소드 이외의 다른 모든 메소드 호출 시 사용되는 매개변수들은
+     괄호로 감싸야 한다.
 <sup>[[link](#no-dsl-parens)]</sup>
 
   ```Ruby
@@ -1119,44 +1071,43 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="no-braces-opts-hash"></a>
-  Omit the outer braces around an implicit options hash.
+  옵션들이 해시라면 가장 바깥 중괄호를 생략한다.
 <sup>[[link](#no-braces-opts-hash)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   user.set({ name: 'John', age: 45, permissions: { read: true } })
 
-  # good
+  # 좋은 예
   user.set(name: 'John', age: 45, permissions: { read: true })
   ```
 
 * <a name="no-dsl-decorating"></a>
-  Omit both the outer braces and parentheses for methods that are part of an
-  internal DSL.
+  내장된 DSL의 일부인 메소드들에 대해 바깥의 중괄호와 괄호를 생략한다.
 <sup>[[link](#no-dsl-decorating)]</sup>
 
   ```Ruby
   class Person < ActiveRecord::Base
-    # bad
+    # 나쁜 예
     validates(:name, { presence: true, length: { within: 1..10 } })
 
-    # good
+    # 좋은 예
     validates :name, presence: true, length: { within: 1..10 }
   end
   ```
 
 * <a name="no-args-no-parens"></a>
-  Omit parentheses for method calls with no arguments.
+  인수가 없는 메소드를 호출할 때 괄호를 생략한다.
 <sup>[[link](#no-args-no-parens)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   Kernel.exit!()
   2.even?()
   fork()
   'test'.upcase()
 
-  # good
+  # 좋은 예
   Kernel.exit!
   2.even?
   fork
@@ -1164,65 +1115,67 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="single-action-blocks"></a>
-  Use the proc invocation shorthand when the invoked method is the only operation of a block.
+  블록의 연산이 메소드 호출뿐이라면 프록 발동 단축(proc invocation shorthand)을
+  사용한다.
 <sup>[[link](#single-action-blocks)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   names.map { |name| name.upcase }
 
-  # good
+  # 좋은 예
   names.map(&:upcase)
   ```
 
 * <a name="single-line-blocks"></a>
-  Prefer `{...}` over `do...end` for single-line blocks.  Avoid using `{...}`
-  for multi-line blocks (multiline chaining is always ugly). Always use
-  `do...end` for "control flow" and "method definitions" (e.g. in Rakefiles and
-  certain DSLs).  Avoid `do...end` when chaining.
+  한 줄짜리 블록에서는 `do...end`보다 `{...}`가 권장된다. 여러 줄짜리 블록에
+  대해 `{...}`를 사용하는 것은 피하라.(줄이 많으면 항상 보기에 안 좋다.)
+  "제어 흐름"과 "메소드 정의"에는 항상 `do...end`를 사용하라.(예. Rakefile이나
+  특정 DSL 내에서) 연속적(chaining)일 때는 `do...end`를 피하라.
 <sup>[[link](#single-line-blocks)]</sup>
 
   ```Ruby
   names = %w(Bozhidar Steve Sarah)
 
-  # bad
+  # 나쁜 예
   names.each do |name|
     puts name
   end
 
-  # good
+  # 좋은 예
   names.each { |name| puts name }
 
-  # bad
+  # 나쁜 예
   names.select do |name|
     name.start_with?('S')
   end.map { |name| name.upcase }
 
-  # good
+  # 좋은 예
   names.select { |name| name.start_with?('S') }.map(&:upcase)
   ```
 
-  Some will argue that multiline chaining would look OK with the use of {...},
-  but they should ask themselves - is this code really readable and can the
-  blocks' contents be extracted into nifty methods?
+  어떤 사람은 {...}를 사용하는 여러 줄에 걸친 연쇄(chaining)다 보기에 괜찮다고
+  주장할 수도 있겠지만 정말 그러한지는 다음 사항들에 대해 자문해봐야 한다.
+  그렇게 작성된 코드가 가독성이 좋은가? 또 블록 내부의 내용이 깔끔하게 메소드로
+  추출 가능한가? 등에 대해서 말이다.
 
 * <a name="block-argument"></a>
-  Consider using explicit block argument to avoid writing block literal that
-  just passes its arguments to another block. Beware of the performance impact,
-  though, as the block gets converted to a Proc.
+  다른 블록에 인수만 넘기는 블록문 쓰는 것을 피하기 위해, 명시적으로 블록
+  인수를 사용하는 것을 고려해보라. 블록이 `proc`으로 변하면서, 성능에 영향을
+  주는 것을 조심해야 한다.
 <sup>[[link](#block-argument)]</sup>
 
   ```Ruby
   require 'tempfile'
 
-  # bad
+  # 나쁜 예
   def with_tmp_dir
     Dir.mktmpdir do |tmp_dir|
       Dir.chdir(tmp_dir) { |dir| yield dir }  # block just passes arguments
     end
   end
 
-  # good
+  # 좋은 예
   def with_tmp_dir(&block)
     Dir.mktmpdir do |tmp_dir|
       Dir.chdir(tmp_dir, &block)
@@ -1235,28 +1188,27 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="no-explicit-return"></a>
-  Avoid `return` where not required for flow of control.
+  제어문에 불필요한 `return`을 피하라.
 <sup>[[link](#no-explicit-return)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def some_method(some_arr)
     return some_arr.size
   end
 
-  # good
+  # 좋은 예
   def some_method(some_arr)
     some_arr.size
   end
   ```
 
 * <a name="no-self-unless-required"></a>
-  Avoid `self` where not required. (It is only required when calling a self
-  write accessor.)
+  불필요한 `self`를 피하라.(이건, self write accessor를 호출할 때만 필요하다.)
 <sup>[[link](#no-self-unless-required)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def ready?
     if self.last_reviewed_at > self.last_updated_at
       self.worker.update(self.content, self.options)
@@ -1265,7 +1217,7 @@ condition](#safe-assignment-in-condition).
     self.status == :verified
   end
 
-  # good
+  # 좋은 예
   def ready?
     if last_reviewed_at > last_updated_at
       worker.update(content, options)
@@ -1276,28 +1228,28 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="no-shadowing"></a>
-  As a corollary, avoid shadowing methods with local variables unless they are
-  both equivalent.
+  당연하지만 지역 변수와 메소드가 같은 것을 의미하지 않을 때, 지역변수로 메소드를
+  가리는 것을 피하라.
 <sup>[[link](#no-shadowing)]</sup>
 
   ```Ruby
   class Foo
     attr_accessor :options
 
-    # ok
+    # 괜찮은 예
     def initialize(options)
       self.options = options
-      # both options and self.options are equivalent here
+      # option과 self.option은 여기서 같다.
     end
 
-    # bad
+    # 나쁜 예
     def do_something(options = {})
       unless options[:when] == :later
         output(self.options[:message])
       end
     end
 
-    # good
+    # 좋은 예
     def do_something(params = {})
       unless params[:when] == :later
         output(options[:message])
@@ -1307,26 +1259,25 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="safe-assignment-in-condition"></a>
-  Don't use the return value of `=` (an assignment) in conditional expressions
-  unless the assignment is wrapped in parentheses. This is a fairly popular
-  idiom among Rubyists that's sometimes referred to as *safe assignment in
-  condition*.
+  배정문이 괄호안에 싸인 경우를 제외하고는, 조건식에서 `=`(배정 연산자)를 써서
+  값을 반환하지 마라. 이것은 *조건문에서 안전하게 대입하기*라 불리는 루비 사용자
+  사이에서는 상당히 유명한 관용 표현이다.
 <sup>[[link](#safe-assignment-in-condition)]</sup>
 
   ```Ruby
-  # bad (+ a warning)
+  # 나쁜 예(+ 주의)
   if v = array.grep(/foo/)
     do_something(v)
     ...
   end
 
-  # good (MRI would still complain, but RuboCop won't)
+  # 좋은 예(MRI would still complain, but RuboCop won't)
   if (v = array.grep(/foo/))
     do_something(v)
     ...
   end
 
-  # good
+  # 좋은 예
   v = array.grep(/foo/)
   if v
     do_something(v)
@@ -1335,11 +1286,11 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="self-assignment"></a>
-  Use shorthand self assignment operators whenever applicable.
+  가능하면 생략된 스타일의 자체 대입 연산자를 사용하라.
 <sup>[[link](#self-assignment)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   x = x + y
   x = x * y
   x = x**y
@@ -1347,7 +1298,7 @@ condition](#safe-assignment-in-condition).
   x = x || y
   x = x && y
 
-  # good
+  # 좋은 예
   x += y
   x *= y
   x **= y
@@ -1357,154 +1308,154 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="double-pipe-for-uninit"></a>
-  Use `||=` to initialize variables only if they're not already initialized.
+  초기화가 안된 변수를 초기화 할 때에는 `||=`를 사용하라.
 <sup>[[link](#double-pipe-for-uninit)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   name = name ? name : 'Bozhidar'
 
-  # bad
+  # 나쁜 예
   name = 'Bozhidar' unless name
 
-  # good - set name to Bozhidar, only if it's nil or false
+  # 좋은 예 - name이 nil이나 false가 아니면 'Bozhidar'로 초기화한다.
   name ||= 'Bozhidar'
   ```
 
 * <a name="no-double-pipes-for-bools"></a>
-  Don't use `||=` to initialize boolean variables. (Consider what would happen
-  if the current value happened to be `false`.)
+  boolean 변수에 대해서는 `||=`로 초기화하지 마라.(현재 변수가 `false`일 때,
+  무슨 일이 일어날지 생각하라.)
 <sup>[[link](#no-double-pipes-for-bools)]</sup>
 
   ```Ruby
-  # bad - would set enabled to true even if it was false
+  # 나쁜 예 - enabled가 false 일 때도 true로 대입
   enabled ||= true
 
-  # good
+  # 좋은 예
   enabled = true if enabled.nil?
   ```
 
 * <a name="double-amper-preprocess"></a>
-  Use `&&=` to preprocess variables that may or may not exist. Using `&&=`
-  will change the value only if it exists, removing the need to check its
-  existence with `if`.
+  존재여부를 모르는 전처리 변수에는 `&&=`를 쓴다. `&&=`를 사용하면 값이 존재할
+  때만 값을 바꾸기 때문에 값 존재 여부를 확인하는 `if`는 없어도 된다.
 <sup>[[link](#double-amper-preprocess)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   if something
     something = something.downcase
   end
 
-  # bad
+  # 나쁜 예
   something = something ? something.downcase : nil
 
-  # ok
+  # 괜찮은 예
   something = something.downcase if something
 
-  # good
+  # 좋은 예
   something = something && something.downcase
 
-  # better
+  # 더 좋은 예
   something &&= something.downcase
   ```
 
 * <a name="no-case-equality"></a>
-  Avoid explicit use of the case equality operator `===`. As its name implies
-  it is meant to be used implicitly by `case` expressions and outside of them it
-  yields some pretty confusing code.
+  case 동등(equality) 연산자 `===`를 사용하는 것을 피하라. 왜냐하면 그 이름에서
+  말해주듯, 이 연산자는 암묵적으로 `case`의(동등 여부뿐만 아니라) 상태를
+  판별하는 데에 사용되도록 고안되었기 때문에, 외부에서 본다면 약간 혼란스러운
+  코드가 된다.
 <sup>[[link](#no-case-equality)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   Array === something
   (1..100) === 7
   /something/ === some_string
 
-  # good
+  # 좋은 예
   something.is_a?(Array)
   (1..100).include?(7)
   some_string =~ /something/
   ```
 
 * <a name="eql"></a>
-  Do not use `eql?` when using `==` will do. The stricter comparison semantics
-  provided by `eql?` are rarely needed in practice.
+  `==`로 할수 있을 때에는 `eql?`을 사용하지 마라. `eql?`이 제공하는 엄격한
+  비교는 대부분 필요 없다.
 <sup>[[link](#eql)]</sup>
 
   ```Ruby
-  # bad - eql? is the same as == for strings
-  "ruby".eql? some_str
+  # 나쁜 예 - eql?은 문자열에서는 ==와 같음
+  'ruby'.eql? some_str
 
-  # good
-  "ruby" == some_str
-  1.0.eql? x # eql? makes sense here if want to differentiate between Fixnum and Float 1
+  # 좋은 예
+  'ruby' == some_str
+  1.0.eql? x # Fixnum과 Float 1의 식별하기 위해 eql?을 사용하는 것은 괜찮다.
   ```
 
 * <a name="no-cryptic-perlisms"></a>
-  Avoid using Perl-style special variables (like `$:`, `$;`, etc. ). They are
-  quite cryptic and their use in anything but one-liner scripts is discouraged.
-  Use the human-friendly aliases provided by the `English` library.
+  펄 스타일의 특수 변수(`$:`, `$;` 등)사용을 피하라. 그들은 상당히
+  기괴해 보이고, one-liner 스크립트 외의 그것들의 사용은 읽기 힘들다. `English`
+  라이브러리에서 제공하는 인간 친화적인 alias를 사용하라.
 <sup>[[link](#no-cryptic-perlisms)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   $:.unshift File.dirname(__FILE__)
 
-  # good
+  # 좋은 예
   require 'English'
   $LOAD_PATH.unshift File.dirname(__FILE__)
   ```
 
 * <a name="parens-no-spaces"></a>
-  Do not put a space between a method name and the opening parenthesis.
+  메소드 이름과 괄호 사이에 공백을 넣지 마라.
 <sup>[[link](#parens-no-spaces)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   f (3 + 2) + 1
 
-  # good
+  # 좋은 예
   f(3 + 2) + 1
   ```
 
 * <a name="parens-as-args"></a>
-  If the first argument to a method begins with an open parenthesis, always
-  use parentheses in the method invocation. For example, write `f((3 + 2) + 1)`.
+  메소드가 시작할 때의 첫 번째 인수가 괄호로 시작하면 메소드 호출 시 항상 괄호를
+  사용하라. 예를 들면, `f((3 + 2) + 1)`처럼 쓴다.
 <sup>[[link](#parens-as-args)]</sup>
 
 * <a name="always-warn-at-runtime"></a>
-  Always run the Ruby interpreter with the `-w` option so it will warn you if
-  you forget either of the rules above!
+  항상 `-w` 옵션과 함께 루비 인터프리터를 실행하라. 그러면 위의 규칙들을
+  잊어버렸을 때 경고할 것이다.
 <sup>[[link](#always-warn-at-runtime)]</sup>
 
 * <a name="no-nested-methods"></a>
-  Do not use nested method definitions, use lambda instead.
-  Nested method definitions actually produce methods in the same scope
-  (e.g. class) as the outer method. Furthermore, the "nested method" will be
-  redefined every time the method containing its definition is invoked.
+  중첩 메소드 선언을 사용하는 대신, 람다를 사용한다.
+  중첩 메소드 선언은 사실 밖의 메소드와 같은 범위(예를 들어 클래스)에서 메소드를
+  생성한다. 더욱이, "중첩된 메소드"는 선언이 들어있는 메소드가 호출될 떄마다
+  재정의된다.
 <sup>[[link](#no-nested-methods)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def foo(x)
     def bar(y)
-      # body omitted
+      # 몸통 생략
     end
 
     bar(x)
   end
 
-  # good - the same as the previous, but no bar redefinition on every foo call
+  # 좋은 예 - 위와 같지만, foo가 호출될 때마다 bar가 매번 재정의되지 않는다
   def bar(y)
-    # body omitted
+    # 몸통 생략
   end
 
   def foo(x)
     bar(x)
   end
 
-  # also good
+  # 좋은 예
   def foo(x)
     bar = ->(y) { ... }
     bar.call(x)
@@ -1512,22 +1463,22 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="lambda-multi-line"></a>
-  Use the new lambda literal syntax for single line body blocks. Use the
-  `lambda` method for multi-line blocks.
+  한 줄짜리 본문 블록에 새로운 lambda 구문을 사용하라. `lambda` 메소드는
+  여러 줄이 있는 블록에 써라.
 <sup>[[link](#lambda-multi-line)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   l = lambda { |a, b| a + b }
   l.call(1, 2)
 
-  # correct, but looks extremely awkward
+  # 맞지만, 보기에 매우 어색한 예
   l = ->(a, b) do
     tmp = a * 7
     tmp * b / 50
   end
 
-  # good
+  # 좋은 예
   l = ->(a, b) { a + b }
   l.call(1, 2)
 
@@ -1538,70 +1489,69 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="stabby-lambda-with-args"></a>
-Don't omit the parameter parentheses when defining a stabby lambda with
-parameters.
+매개변수와 함께 새로운 람다(stabby lambda)를 사용할 때에는 매개변수 괄호를
+생략하지 않는다.
 <sup>[[link](#stabby-lambda-with-args)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   l = ->x, y { something(x, y) }
 
-  # good
+  # 좋은 예
   l = ->(x, y) { something(x, y) }
   ```
 
 * <a name="stabby-lambda-no-args"></a>
-Omit the parameter parentheses when defining a stabby lambda with
-no parameters.
+매개변수와 없이 새로운 람다(stabby lambda)를 사용할 때에는 매개변수 괄호를
+생략한다.
 <sup>[[link](#stabby-lambda-no-args)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   l = ->() { something }
 
-  # good
+  # 좋은 예
   l = -> { something }
   ```
 
 * <a name="proc"></a>
-  Prefer `proc` over `Proc.new`.
+  `Proc.new`보다는 `proc`을 권장한다.
 <sup>[[link](#proc)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   p = Proc.new { |n| puts n }
 
-  # good
+  # 좋은 예
   p = proc { |n| puts n }
   ```
 
 * <a name="proc-call"></a>
-  Prefer `proc.call()` over `proc[]` or `proc.()` for both lambdas and procs.
+  lambda나 proc에서 `proc[]`이나 `proc.()`보다 `proc.call()`을 권장한다.
 <sup>[[link](#proc-call)]</sup>
 
   ```Ruby
-  # bad - looks similar to Enumeration access
+  # 나쁜 예 - Enumeration 접근과 비슷해 보임
   l = ->(v) { puts v }
   l[1]
 
-  # also bad - uncommon syntax
+  # 역시 나쁜 예 - 잘 쓰지 않는 구문
   l = ->(v) { puts v }
   l.(1)
 
-  # good
+  # 좋은 예
   l = ->(v) { puts v }
   l.call(1)
   ```
 
 * <a name="underscore-unused-vars"></a>
-  Prefix with `_` unused block parameters and local variables. It's also
-  acceptable to use just `_` (although it's a bit less descriptive). This
-  convention is recognized by the Ruby interpreter and tools like RuboCop and
-  will suppress their unused variable warnings.
+  사용하지 않는 블록 인수나, 지역변수에는 `_`를 앞에 붙여라.(설명이 좀 없더라도)
+  `_`만 쓰는 것도 가능하다. 이 컨벤션은 루비 인터프리터와 Robocop과 같은 툴에
+  의해 인지되고, 사용하지 않는 변수에 대한 경고를 숨긴다.
 <sup>[[link](#underscore-unused-vars)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   result = hash.map { |k, v| v + 1 }
 
   def something(x)
@@ -1609,7 +1559,7 @@ no parameters.
     # ...
   end
 
-  # good
+  # 좋은 예
   result = hash.map { |_k, v| v + 1 }
 
   def something(x)
@@ -1617,7 +1567,7 @@ no parameters.
     # ...
   end
 
-  # good
+  # 좋은 예
   result = hash.map { |_, v| v + 1 }
 
   def something(x)
@@ -1627,100 +1577,97 @@ no parameters.
   ```
 
 * <a name="global-stdout"></a>
-  Use `$stdout/$stderr/$stdin` instead of `STDOUT/STDERR/STDIN`.
-  `STDOUT/STDERR/STDIN` are constants, and while you can actually reassign
-  (possibly to redirect some stream) constants in Ruby, you'll get an
-  interpreter warning if you do so.
+  `STDOUT/STDERR/STDIN`보다는 `$stdout/$stderr/$stdin`을 사용하라.
+  `STDOUT/STDERR/STDIN`은 상수이며, 루비에서의 상수는 실제로 재대입 할 수
+  있다.(다른 스트림으로 리디렉션도 가능) 물론 재대입하면 인터프리터의 경고가
+  나올 것이다.
 <sup>[[link](#global-stdout)]</sup>
 
 * <a name="warn"></a>
-  Use `warn` instead of `$stderr.puts`. Apart from being more concise and
-  clear, `warn` allows you to suppress warnings if you need to (by setting the
-  warn level to 0 via `-W0`).
+  `$stderr.puts`보다는 `warn`을 사용하라. 좀 더 간결하고 명확할 뿐만 아니라
+  `warn`을 사용하면 필요에 따라 경고를 숨길 수도 있다.(`-W0`를 통해 경고 수준을
+  0으로 함으로써)
 <sup>[[link](#warn)]</sup>
 
 * <a name="sprintf"></a>
-  Favor the use of `sprintf` and its alias `format` over the fairly cryptic
-  `String#%` method.
+  기괴한 `String#%`메소드보다는 `sprintf`와 alias인 `format`사용이 더 좋다.
 <sup>[[link](#sprintf)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   '%d %d' % [20, 10]
   # => '20 10'
 
-  # good
+  # 좋은 예
   sprintf('%d %d', 20, 10)
   # => '20 10'
 
-  # good
+  # 좋은 예
   sprintf('%{first} %{second}', first: 20, second: 10)
   # => '20 10'
 
   format('%d %d', 20, 10)
   # => '20 10'
 
-  # good
+  # 좋은 예
   format('%{first} %{second}', first: 20, second: 10)
   # => '20 10'
   ```
 
 * <a name="array-join"></a>
-  Favor the use of `Array#join` over the fairly cryptic `Array#*` with
+  문자 인수와 함께 쓰는 기괴한 `Array#*` 보다 `Array#join`의 사용을 선호한다.
 <sup>[[link](#array-join)]</sup>
-  a string argument.
 
   ```Ruby
-  # bad
+  # 나쁜 예
   %w(one two three) * ', '
   # => 'one, two, three'
 
-  # good
+  # 좋은 예
   %w(one two three).join(', ')
   # => 'one, two, three'
   ```
 
 * <a name="splat-arrays"></a>
-  Use `[*var]` or `Array()` instead of explicit `Array` check, when dealing
-  with a variable you want to treat as an Array, but you're not certain it's an
-  array.
+  변수가 배열인지 모르겠지만 그것을 Array로 취급하고 싶을 때에는 명시적인 `Array`
+  체크 대신에 `[*var]` 또는 `Array()`를 사용하라.
 <sup>[[link](#splat-arrays)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   paths = [paths] unless paths.is_a? Array
   paths.each { |path| do_something(path) }
 
-  # good
+  # 좋은 예
   [*paths].each { |path| do_something(path) }
 
-  # good (and a bit more readable)
+  # 좋은 예(좀 더 가독성이 높은)
   Array(paths).each { |path| do_something(path) }
   ```
 
 * <a name="ranges-or-between"></a>
-  Use ranges or `Comparable#between?` instead of complex comparison logic when
-  possible.
+  복잡한 비교논리를 사용하는 것 대신에 가능하면 범위나 `Comparable#between?`을
+  사용하라.
 <sup>[[link](#ranges-or-between)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   do_something if x >= 1000 && x <= 2000
 
-  # good
+  # 좋은 예
   do_something if (1000..2000).include?(x)
 
-  # good
+  # 좋은 예
   do_something if x.between?(1000, 2000)
   ```
 
 * <a name="predicate-methods"></a>
-  Favor the use of predicate methods to explicit comparisons with `==`.
-  Numeric comparisons are OK.
+  `==`로 비교하기 보다 서술형 메소드(predicate methods)를 사용하는 것이 더 좋다.
+  숫자 비교는 괜찮다.
 <sup>[[link](#predicate-methods)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   if x % 2 == 0
   end
 
@@ -1730,7 +1677,7 @@ no parameters.
   if x == nil
   end
 
-  # good
+  # 좋은 예
   if x.even?
   end
 
@@ -1748,54 +1695,54 @@ no parameters.
   ```
 
 * <a name="no-non-nil-checks"></a>
-  Don't do explicit non-`nil` checks unless you're dealing with boolean
-  values.
+  boolean 값을 다룰 때가 아니면, 명시적으로 '`nil`이 아닌 것'을 체크하는 것을
+  피하라.
 <sup>[[link](#no-non-nil-checks)]</sup>
 
     ```ruby
-    # bad
+    # 나쁜 예
     do_something if !something.nil?
     do_something if something != nil
 
-    # good
+    # 좋은 예
     do_something if something
 
-    # good - dealing with a boolean
+    # 좋은 예 - boolean을 다룸
     def value_set?
       !@some_boolean.nil?
     end
     ```
 
 * <a name="no-BEGIN-blocks"></a>
-  Avoid the use of `BEGIN` blocks.
+  `BEGIN` 블록 사용을 피하라.
 <sup>[[link](#no-BEGIN-blocks)]</sup>
 
 * <a name="no-END-blocks"></a>
-  Do not use `END` blocks. Use `Kernel#at_exit` instead.
+  `END` 블록 사용을 피하라. 차라리 `Kernel#at_exit`를 써라.
 <sup>[[link](#no-END-blocks)]</sup>
 
   ```ruby
-  # bad
+  # 나쁜 예
   END { puts 'Goodbye!' }
 
-  # good
+  # 좋은 예
   at_exit { puts 'Goodbye!' }
   ```
 
 * <a name="no-flip-flops"></a>
-  Avoid the use of flip-flops.
+  flip-flop 사용을 피하라.
 <sup>[[link](#no-flip-flops)]</sup>
 
 * <a name="no-nested-conditionals"></a>
-  Avoid use of nested conditionals for flow of control.
+  제어문에서 중첩된 조건문은 피하라.
 <sup>[[link](#no-nested-conditionals)]</sup>
 
-  Prefer a guard clause when you can assert invalid data. A guard clause
-  is a conditional statement at the top of a function that bails out as
-  soon as it can.
+  유효하지 않은 데이터가 들어갈 수도 있는 경우, 보호 구문을 권장한다. 보호
+  구문은 함수에서 가능한 한 빨리 탈출할 수 있게 하는 함수 제일 처음에 있는
+  조건문을 말한다.
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def compute_thing(thing)
     if thing[:foo]
       update_with_bar(thing)
@@ -1807,7 +1754,7 @@ no parameters.
     end
   end
 
-  # good
+  # 좋은 예
   def compute_thing(thing)
     return unless thing[:foo]
     update_with_bar(thing[:foo])
@@ -1816,17 +1763,17 @@ no parameters.
   end
   ```
 
-  Prefer `next` in loops instead of conditional blocks.
+  반복문 내에서는 조건문 블록 대신에 `next`를 선호한다.
 
   ```Ruby
-  # bad
+  # 나쁜 예
   [0, 1, 2, 3].each do |item|
     if item > 1
       puts item
     end
   end
 
-  # good
+  # 좋은 예
   [0, 1, 2, 3].each do |item|
     next unless item > 1
     puts item
@@ -1834,87 +1781,84 @@ no parameters.
   ```
 
 * <a name="map-find-select-reduce-size"></a>
-  Prefer `map` over `collect`, `find` over `detect`, `select` over `find_all`,
-  `reduce` over `inject` and `size` over `length`. This is not a hard
-  requirement; if the use of the alias enhances readability, it's ok to use it.
-  The rhyming methods are inherited from Smalltalk and are not common in other
-  programming languages. The reason the use of `select` is encouraged over
-  `find_all` is that it goes together nicely with `reject` and its name is
-  pretty self-explanatory.
+  `collect`보다는 `map`을, `detect`보다는 `find`를, `find_all`보다는 `select`를,
+  `inject`보다는 `reduce`를, `length`보다는 `size`를 권장한다. 이것이 무리한
+  요구는 아니다. 다른 alias를 써서 가독성이 좋아진다면, 그것도 괜찮다. 메소드의
+  시적인 표현은 Smalltalk 언어로 부터 물려받은 것으로, 일반적인 다른 프로그래밍
+  언어와는 다르다. `select`를 사용하는 이유는 `reject`와 함께 쓰일 때
+  `find_all`보다 좀 더 잘 어울리고 이름 자체가 충분한 설명이 되기 때문이다.
 <sup>[[link](#map-find-select-reduce-size)]</sup>
 
 * <a name="count-vs-size"></a>
-  Don't use `count` as a substitute for `size`. For `Enumerable` objects other
-  than `Array` it will iterate the entire collection in order to determine its
-  size.
+  `size`를 대신해서 `count`를 쓰지 마라. `Array`외의 `Enumerable`객체들은
+  크기를 결정하기 위해 모든 콜렉션을 반복한다.
 <sup>[[link](#count-vs-size)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   some_hash.count
 
-  # good
+  # 좋은 예
   some_hash.size
   ```
 
 * <a name="flat-map"></a>
-  Use `flat_map` instead of `map` + `flatten`.  This does not apply for arrays
-  with a depth greater than 2, i.e.  if `users.first.songs == ['a', ['b','c']]`,
-  then use `map + flatten` rather than `flat_map`.  `flat_map` flattens the
-  array by 1, whereas `flatten` flattens it all the way.
+  `map` + `flatten`의 조합을 사용하는 것 대신 `flat_map`을 사용하라. 이것은
+  2차원 이상의 배열에는 적용되지는 않는다. 다시 말해서,
+  `users.first.songs == ['a', ['b','c']]`의 경우는 `flat_map`보다는
+  `map + flatten`를 사용하라. `flat_map`은 1차원의 배열만 1차원으로 만드는 반면
+  `flatten`은 모든 것을 1차원 배열로 만든다.
 <sup>[[link](#flat-map)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   all_songs = users.map(&:songs).flatten.uniq
 
-  # good
+  # 좋은 예
   all_songs = users.flat_map(&:songs).uniq
   ```
 
 * <a name="reverse-each"></a>
-  Prefer `reverse_each` to `reverse.each` because some classes that `include
-  Enumerable` will provide an efficient implementation. Even in the worst case
-  where a class does not provide a specialized implementation, the general
-  implementation inherited from `Enumerable` will be at least as efficient as
-  using `reverse.each`.
+  `reverse.each`보다는 `reverse_each`를 써라. `include Enumerable`을 사용하는
+  몇몇 클래스에서 좀 더 효율적인 구현을 사용하기 떄문이다. 최악 경우
+  클래스에서 특별한 구현을 사용하지 않는다고 해도, `Enumerable`에서 상속된
+  일반적인 구현은 `reverse.each` 정도의 효율을 낸다.
 <sup>[[link](#reverse-each)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   array.reverse.each { ... }
 
-  # good
+  # 좋은 예
   array.reverse_each { ... }
   ```
 
-## Naming
+## 네이밍
 
-> The only real difficulties in programming are cache invalidation and
-> naming things. <br>
+> 프로그래밍에서 정말 어려운 것은 캐시무효화와 이름 짓기뿐이다. <br>
 > -- Phil Karlton
 
 * <a name="english-identifiers"></a>
-  Name identifiers in English.
+  식별자는 영어로 쓴다.
 <sup>[[link](#english-identifiers)]</sup>
 
   ```Ruby
-  # bad - identifier using non-ascii characters
+  # 나쁜 예 - ascii 문자가 아닌 식별자
   заплата = 1_000
 
-  # bad - identifier is a Bulgarian word, written with Latin letters (instead of Cyrillic)
+  # 나쁜 예 - 식별자가 (키릴문자 대신에)라틴어 문자로 적힌 불가리어 단어다.
   zaplata = 1_000
 
-  # good
+  # 좋은 예
   salary = 1_000
   ```
 
 * <a name="snake-case-symbols-methods-vars"></a>
-  Use `snake_case` for symbols, methods and variables.
+  심볼,메소드,변수에 대해 `snake_case`를 써라.
 <sup>[[link](#snake-case-symbols-methods-vars)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   :'some symbol'
   :SomeSymbol
   :someSymbol
@@ -1929,7 +1873,7 @@ no parameters.
    ...
   end
 
-  # good
+  # 좋은 예
   :some_symbol
 
   def some_method
@@ -1938,12 +1882,12 @@ no parameters.
   ```
 
 * <a name="camelcase-classes"></a>
-  Use `CamelCase` for classes and modules.  (Keep acronyms like HTTP, RFC, XML
-  uppercase.)
+  클래스와 모듈에 대해서는 `CamelCase`(카멜표기)를 사용하라.
+  (HTTP,RFC,XML와 같은 약어는 대문자로 유지하라)
 <sup>[[link](#camelcase-classes)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   class Someclass
     ...
   end
@@ -1960,7 +1904,7 @@ no parameters.
     ...
   end
 
-  # good
+  # 좋은 예
   class SomeClass
     ...
   end
@@ -1975,58 +1919,58 @@ no parameters.
   ```
 
 * <a name="snake-case-files"></a>
-  Use `snake_case` for naming files, e.g. `hello_world.rb`.
+  파일 이름은 `snake_case`로 써라.
+  예. `hello_world.rb`
 <sup>[[link](#snake-case-files)]</sup>
 
 * <a name="snake-case-dirs"></a>
-  Use `snake_case` for naming directories, e.g.
-  `lib/hello_world/hello_world.rb`.
+  디렉토리 이름은 `snake_case`로 써라.
+  예. `lib/hello_world/hello_world.rb`
 <sup>[[link](#snake-case-dirs)]</sup>
 
 * <a name="one-class-per-file"></a>
-  Aim to have just a single class/module per source file. Name the file name
-  as the class/module, but replacing CamelCase with snake_case.
+  되도록이면 하나의 소스파일은 하나의 클래스/모듈을 갖도록 하라. 파일명은
+  `CamelCase`로 적힌 클래스/모듈이름을 `snake_case`로 바꾼 것으로 하라.
 <sup>[[link](#one-class-per-file)]</sup>
 
 * <a name="screaming-snake-case"></a>
-  Use `SCREAMING_SNAKE_CASE` for other constants.
+  다른 상수들은 `SCREAMING_SNAKE_CASE`을 사용하라.
 <sup>[[link](#screaming-snake-case)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   SomeConst = 5
 
-  # good
+  # 좋은 예
   SOME_CONST = 5
   ```
 
 * <a name="bool-methods-qmark"></a>
-  The names of predicate methods (methods that return a boolean value) should
-  end in a question mark.  (i.e. `Array#empty?`). Methods that don't return a
-  boolean, shouldn't end in a question mark.
+  서술형 메소드(boolean 값을 반환하는 메소드)의 이름은 꼭 물음표로 끝나야 한다.
+  (예를 들어 `Array#empty?`) 메소드가 boolean 값을 반환하는게 아니라면, 물음표로
+  끝나선 안 된다.
 <sup>[[link](#bool-methods-qmark)]</sup>
 
 * <a name="dangerous-method-bang"></a>
-  The names of potentially *dangerous* methods (i.e. methods that modify
-  `self` or the arguments, `exit!` (doesn't run the finalizers like `exit`
-  does), etc.) should end with an exclamation mark if there exists a safe
-  version of that *dangerous* method.
+  잠재적으로 *위험한* 메소드의(예를 들어, `self`나 인수를 수정하는 메소드와
+  `exit!`(finalizer를 실행하지 않음) 등) 이름은 *위험한* 메소드의 안전한 버전이
+  존재할 때는 느낌표로 끝낸다.
 <sup>[[link](#dangerous-method-bang)]</sup>
 
   ```Ruby
-  # bad - there is no matching 'safe' method
+  # 나쁜 예 - 'safe'한 메소드가 없다.
   class Person
     def update!
     end
   end
 
-  # good
+  # 좋은 예
   class Person
     def update
     end
   end
 
-  # good
+  # 좋은 예
   class Person
     def update!
     end
@@ -2037,8 +1981,7 @@ no parameters.
   ```
 
 * <a name="safe-because-unsafe"></a>
-  Define the non-bang (safe) method in terms of the bang (dangerous) one if
-  possible.
+  가능하면 bang(위험한) 관점에서 non-bang(안전한)메소드를 정의하라.
 <sup>[[link](#safe-because-unsafe)]</sup>
 
   ```Ruby
@@ -2060,14 +2003,14 @@ no parameters.
   ```
 
 * <a name="reduce-blocks"></a>
-  When using `reduce` with short blocks, name the arguments `|a, e|`
-  (accumulator, element).
+  짧은 블록과 함께 `reduce`를 쓸 때에는,
+  인수 이름을 `|a, e|`로 하라.(accumulator, element)
 <sup>[[link](#reduce-blocks)]</sup>
 
-* <a name="other-arg"></a>
-  When defining binary operators, name the parameter `other`(`<<` and `[]` are
-  exceptions to the rule, since their semantics are different).
-<sup>[[link](#other-arg)]</sup>
+* <a name="other-param"></a>
+  이항 연산자를 정의할 때에는, 매개변수 이름을 `other`로 하라.
+  (`<<`와 `[]`는 의미가 달라지므로 이 규칙에서 제외된다.)
+<sup>[[link](#other-param)]</sup>
 
   ```Ruby
   def +(other)
@@ -2075,70 +2018,64 @@ no parameters.
   end
   ```
 
-## Comments
+## 주석
 
-> Good code is its own best documentation. As you're about to add a
-> comment, ask yourself, "How can I improve the code so that this
-> comment isn't needed?" Improve the code and then document it to make
-> it even clearer. <br>
+> 좋은 코드는 가장 좋은 문서이다. 주석을 추가하려고 할 때 스스로에게 물어보라.
+> "이 주석이 필요 없으려면 코드를 어떻게 만들면 될까?" 코드를 더 잘 작성하여
+> 문서를 명확하게 하자. <br>
 > -- Steve McConnell
 
 * <a name="no-comments"></a>
-  Write self-documenting code and ignore the rest of this section. Seriously!
+  스스로 문서화가 되는 코드를 작성하고 이 단락은 무시하도록 하자. 진짜로!
 <sup>[[link](#no-comments)]</sup>
 
 * <a name="english-comments"></a>
-  Write comments in English.
+  주석은 영어로 작성한다.
 <sup>[[link](#english-comments)]</sup>
 
 * <a name="hash-space"></a>
-  Use one space between the leading `#` character of the comment and the text
-  of the comment.
+  `#`뒤에 한 칸 띄고 주석 내용을 작성한다.
 <sup>[[link](#hash-space)]</sup>
 
 * <a name="english-syntax"></a>
-  Comments longer than a word are capitalized and use punctuation. Use [one
-  space](http://en.wikipedia.org/wiki/Sentence_spacing) after periods.
+  한 단어 이상의 주석은 대문자 표기법과 구두점 규칙을 사용한다. 마침표 뒤에는
+  [공백](https://en.wikipedia.org/wiki/Sentence_spacing)을 사용한다.
 <sup>[[link](#english-syntax)]</sup>
 
 * <a name="no-superfluous-comments"></a>
-  Avoid superfluous comments.
+  불필요한 주석은 피한다.
 <sup>[[link](#no-superfluous-comments)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   counter += 1 # Increments counter by one.
   ```
 
 * <a name="comment-upkeep"></a>
-  Keep existing comments up-to-date. An outdated comment is worse than no
-  comment at all.
+  주석은 최신 상태로 유지한다. 코드내용과 맞지 않은 주석은 없는 것이 낫다.
 <sup>[[link](#comment-upkeep)]</sup>
 
-> Good code is like a good joke - it needs no explanation. <br>
+> 좋은 주석은 좋은 유머와 같다. - 설명이 필요없다. <br>
 > -- Russ Olsen
 
 * <a name="refactor-dont-comment"></a>
-  Avoid writing comments to explain bad code. Refactor the code to make it
-  self-explanatory. (Do or do not - there is no try. --Yoda)
+  나쁜 코드에 대해서 주석을 달지 마라. 코드가 스스로 설명할 수 있도록 리펙토링
+  하라.(하거나 안 하거나 둘 중 하나다. 노력했다는 것은 없다. -- Yoda)
 <sup>[[link](#refactor-dont-comment)]</sup>
 
-### Comment Annotations
+### 주석 어노테이션
 
 * <a name="annotate-above"></a>
-  Annotations should usually be written on the line immediately above the
-  relevant code.
+  어노테이션은 관련된 코드 바로 위에 작성한다.
 <sup>[[link](#annotate-above)]</sup>
 
 * <a name="annotate-keywords"></a>
-  The annotation keyword is followed by a colon and a space, then a note
-  describing the problem.
+  어노테이션 키워드는 콜론과 공백 다음에 설명을 작성한다.
 <sup>[[link](#annotate-keywords)]</sup>
 
 * <a name="indent-annotations"></a>
-  If multiple lines are required to describe the problem, subsequent lines
-  should be indented three spaces after the `#` (one general plus two for
-  indentation purpose).
+  만약 설명이 여러 줄인 경우 다음 줄은 `#`을 쓰고 세 칸 들여쓰기 한다.(한 칸은
+  일반적으로 하고, 두 칸은 들여쓰기 목적)
 <sup>[[link](#indent-annotations)]</sup>
 
   ```Ruby
@@ -2150,9 +2087,8 @@ no parameters.
   ```
 
 * <a name="rare-eol-annotations"></a>
-  In cases where the problem is so obvious that any documentation would be
-  redundant, annotations may be left at the end of the offending line with no
-  note. This usage should be the exception and not the rule.
+  설명이 명확하지 않고 중복되는 경우 예외적으로 라인 뒤쪽에 어노테이션을
+  작성한다.(규칙은 아님)
 <sup>[[link](#rare-eol-annotations)]</sup>
 
   ```Ruby
@@ -2162,72 +2098,69 @@ no parameters.
   ```
 
 * <a name="todo"></a>
-  Use `TODO` to note missing features or functionality that should be added at
-  a later date.
+  `TODO`는 빠진 기능을 나중에 추가해야 할 때 사용한다.
 <sup>[[link](#todo)]</sup>
 
 * <a name="fixme"></a>
-  Use `FIXME` to note broken code that needs to be fixed.
+  `FIXME`는 코드가 깨져 고쳐야 할 때 사용한다.
 <sup>[[link](#fixme)]</sup>
 
 * <a name="optimize"></a>
-  Use `OPTIMIZE` to note slow or inefficient code that may cause performance
-  problems.
+  `OPTIMIZE`는 코드가 느리거나 비효율적이라서 성능상 문제가 생기는 경우에
+  사용한다.
 <sup>[[link](#optimize)]</sup>
 
 * <a name="hack"></a>
-  Use `HACK` to note code smells where questionable coding practices were used
-  and should be refactored away.
+  `HACK`은 코드에 냄새가 있는 것 같아 이야기해 보고 리팩토링이 필요한 경우
+  사용한다.
 <sup>[[link](#hack)]</sup>
 
 * <a name="review"></a>
-  Use `REVIEW` to note anything that should be looked at to confirm it is
-  working as intended. For example: `REVIEW: Are we sure this is how the client
-  does X currently?`
+  `REVIEW`는 의도한 대로 동작하는지 확인해야 하는 경우에 사용한다. 예를 들어:
+  `REVIEW: Are we sure this is how the client does X currently?`
 <sup>[[link](#review)]</sup>
 
 * <a name="document-annotations"></a>
-  Use other custom annotation keywords if it feels appropriate, but be sure to
-  document them in your project's `README` or similar.
+  다른 어노테이션 키워드들은 필요에 따라 작성하고 `README` 같은 곳에 정리해둔다.
 <sup>[[link](#document-annotations)]</sup>
 
-## Classes & Modules
+## 클래스와 모듈
 
 * <a name="consistent-classes"></a>
-  Use a consistent structure in your class definitions.
+  클래스 정의는 일관된 구조를 사용한다.
 <sup>[[link](#consistent-classes)]</sup>
 
   ```Ruby
   class Person
-    # extend and include go first
+    # extend와 include가 먼저 나온다.
     extend SomeModule
     include AnotherModule
 
     # inner classes
     CustomErrorKlass = Class.new(StandardError)
 
-    # constants are next
+    # 상수는 다음에 나온다.
     SOME_CONSTANT = 20
 
-    # afterwards we have attribute macros
+    # 그 뒤로 attribute 매크로가 온다.
     attr_reader :name
 
-    # followed by other macros (if any)
+    # 다른 매크로들이 있다면 그 다음에 나온다.
     validates :name
 
-    # public class methods are next in line
+    # public 클래스 메소드가 다음 줄에 온다.
     def self.some_method
     end
 
-    # initialization goes between class methods and other instance methods
+    # 초기화는 클래스 메소드와 다른 인스턴스 메소드 사이에 온다.
     def initialize
     end
 
-    # followed by other public instance methods
+    # 다른 public 인스턴스 메소드가 뒤에 온다.
     def some_method
     end
 
-    # protected and private methods are grouped near the end
+    # protected와 private 메소드는 마지막 근처에 모아둔다.
     protected
 
     def some_protected_method
@@ -2241,70 +2174,70 @@ no parameters.
   ```
 
 * <a name="file-classes"></a>
-  Don't nest multi line classes within classes. Try to have such nested
-  classes each in their own file in a folder named like the containing class.
+  한 줄 이상의 클래스는 클래스 안에 선언하지 않는다. 이런 경우에는 클래스 이름의
+  폴더를 만들고 각각의 inner 클래스를 별도의 파일로 분리해 보는 것도 좋다.
 <sup>[[link](#file-classes)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
 
   # foo.rb
   class Foo
     class Bar
-      # 30 methods inside
+      # 안에 30개의 메소드
     end
 
     class Car
-      # 20 methods inside
+      # 안에 20개의 메소드
     end
 
-    # 30 methods inside
+    # 안에 30개의 메소드
   end
 
-  # good
+  # 좋은 예
 
   # foo.rb
   class Foo
-    # 30 methods inside
+    # 안에 30개의 메소드
   end
 
   # foo/bar.rb
   class Foo
     class Bar
-      # 30 methods inside
+      # 안에 30개의 메소드
     end
   end
 
   # foo/car.rb
   class Foo
     class Car
-      # 20 methods inside
+      # 안에 20개의 메소드
     end
   end
   ```
 
 * <a name="modules-vs-classes"></a>
-  Prefer modules to classes with only class methods. Classes should be used
-  only when it makes sense to create instances out of them.
+  클래스 메소드만 가지는 클래스는 모듈로 선언하는 것이 더 좋다. 클래스는
+  인스턴스를 생성해서 사용할 때만 사용한다.
 <sup>[[link](#modules-vs-classes)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   class SomeClass
     def self.some_method
-      # body omitted
+      # body 생략
     end
 
     def self.some_other_method
     end
   end
 
-  # good
+  # 좋은 예
   module SomeModule
     module_function
 
     def some_method
-      # body omitted
+      # body 생략
     end
 
     def some_other_method
@@ -2313,53 +2246,49 @@ no parameters.
   ```
 
 * <a name="module-function"></a>
-  Favor the use of `module_function` over `extend self` when you want to turn
-  a module's instance methods into class methods.
+  모듈의 인스턴스 메소드를 클래스 메소드로 바꿀 때는 `extend self`보다는
+  `module_function`을 더 선호한다.
 <sup>[[link](#module-function)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   module Utilities
     extend self
 
     def parse_something(string)
-      # do stuff here
+      # 여기에 뭔가
     end
 
     def other_utility_method(number, string)
-      # do some more stuff
+      # 여기에 좀 더 뭔가
     end
   end
 
-  # good
+  # 좋은 예
   module Utilities
     module_function
 
     def parse_something(string)
-      # do stuff here
+      # 여기에 뭔가
     end
 
     def other_utility_method(number, string)
-      # do some more stuff
+      # 여기에 좀 더 뭔가
     end
   end
   ```
 
 * <a name="liskov"></a>
-  When designing class hierarchies make sure that they conform to the [Liskov
-  Substitution
-  Principle](http://en.wikipedia.org/wiki/Liskov_substitution_principle).
+  클래스 계층을 디자인 할 때는 [리스코프 치환
+  원칙](https://ko.wikipedia.org/wiki/리스코프_치환_원칙)에 따른다.
 <sup>[[link](#liskov)]</sup>
 
 * <a name="solid-design"></a>
-  Try to make your classes as
-  [SOLID](http://en.wikipedia.org/wiki/SOLID_\(object-oriented_design\)) as
-  possible.
+  클래스는 가능한 한 [SOLID](https://ko.wikipedia.org/wiki/SOLID) 원칙을 따른다.
 <sup>[[link](#solid-design)]</sup>
 
 * <a name="define-to-s"></a>
-  Always supply a proper `to_s` method for classes that represent domain
-  objects.
+  도메인 객체 클래스는 항상 적합한 `to_s` 메소드를 제공한다.
 <sup>[[link](#define-to-s)]</sup>
 
   ```Ruby
@@ -2378,11 +2307,11 @@ no parameters.
   ```
 
 * <a name="attr_family"></a>
-  Use the `attr` family of functions to define trivial accessors or mutators.
+  특별한 일을 하지 않는 accesstor나 mutator는 `attr`류의 함수를 사용한다.
 <sup>[[link](#attr_family)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   class Person
     def initialize(first_name, last_name)
       @first_name = first_name
@@ -2398,7 +2327,7 @@ no parameters.
     end
   end
 
-  # good
+  # 좋은 예
   class Person
     attr_reader :first_name, :last_name
 
@@ -2410,26 +2339,26 @@ no parameters.
   ```
 
 * <a name="attr"></a>
-  Avoid the use of `attr`. Use `attr_reader` and `attr_accessor` instead.
+  그냥 `attr`을 사용하지 말고 `attr_reader`나 `attr_accessor`을 사용한다.
 <sup>[[link](#attr)]</sup>
 
   ```Ruby
-  # bad - creates a single attribute accessor (deprecated in 1.9)
+  # 나쁜 예 - accessor를 하나 생성(루비 1.9에서 비추천됨)
   attr :something, true
-  attr :one, :two, :three # behaves as attr_reader
+  attr :one, :two, :three # attr_reader 처럼 동작한다.
 
-  # good
+  # 좋은 예
   attr_accessor :something
   attr_reader :one, :two, :three
   ```
 
 * <a name="struct-new"></a>
-  Consider using `Struct.new`, which defines the trivial accessors,
-  constructor and comparison operators for you.
+  특별하지 않은 accessor와 생성자, 비교 연산자를 가지는 클래스는 `Struct.new`를
+  사용해 보는 것도 좋다.
 <sup>[[link](#struct-new)]</sup>
 
   ```Ruby
-  # good
+  # 좋은 예
   class Person
     attr_accessor :first_name, :last_name
 
@@ -2439,60 +2368,59 @@ no parameters.
     end
   end
 
-  # better
+  # 더 좋은 예
   Person = Struct.new(:first_name, :last_name) do
   end
-  ````
+  ```
 
 * <a name="no-extend-struct-new"></a>
-  Don't extend an instance initialized by `Struct.new`. Extending it introduces
-  a superfluous class level and may also introduce weird errors if the file is
-  required multiple times.
+  `Struct.new`에 의해 초기화된 인스턴스를 확장하지 않는다. `Struct.new`를
+  확장하는 것은 쓸데없는 클래스 계층을 하나 더 만드는 것이고 만약 그 파일이
+  여러 번 require 된다면 이상한 에러가 날지도 모른다.
 <sup>[[link](#no-extend-struct-new)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   class Person < Struct.new(:first_name, :last_name)
   end
 
-  # good
+  # 좋은 예
   Person = Struct.new(:first_name, :last_name)
-  ````
+  ```
 
 * <a name="factory-methods"></a>
-  Consider adding factory methods to provide additional sensible ways to
-  create instances of a particular class.
+  어떤 클래스의 인스턴스를 생성할 때 좀 더 명확한 방법을 제공하는 팩토리
+  메소드를 추가하는 것을 고려해보자.
 <sup>[[link](#factory-methods)]</sup>
 
   ```Ruby
   class Person
     def self.create(options_hash)
-      # body omitted
+      # body 생략
     end
   end
   ```
 
 * <a name="duck-typing"></a>
-  Prefer [duck-typing](http://en.wikipedia.org/wiki/Duck_typing) over
-  inheritance.
+  상속보다는 [duck-typing](https://ko.wikipedia.org/wiki/덕_타이핑)을 쓰는 것이 더 좋다.
 <sup>[[link](#duck-typing)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   class Animal
-    # abstract method
+    # abstract 메소드
     def speak
     end
   end
 
-  # extend superclass
+  # superclass를 상속
   class Duck < Animal
     def speak
       puts 'Quack! Quack'
     end
   end
 
-  # extend superclass
+  # superclass를 상속
   class Dog < Animal
     def speak
       puts 'Bau! Bau!'
@@ -2514,8 +2442,7 @@ no parameters.
   ```
 
 * <a name="no-class-vars"></a>
-  Avoid the usage of class (`@@`) variables due to their "nasty" behavior in
-  inheritance.
+  클래스 변수(`@@`)는 상속을 할 때 좋지 않기 때문에 사용을 피한다.
 <sup>[[link](#no-class-vars)]</sup>
 
   ```Ruby
@@ -2531,24 +2458,22 @@ no parameters.
     @@class_var = 'child'
   end
 
-  Parent.print_class_var # => will print "child"
+  Parent.print_class_var # => 'child'가 출력된다.
   ```
 
-  As you can see all the classes in a class hierarchy actually share one
-  class variable. Class instance variables should usually be preferred
-  over class variables.
+  상속 계층에 있는 모든 클래스는 하나의 클래스 변수를 공유한다. 클래스
+  변수보다는 클래스 인스턴스 변수를 사용하는 것이 더 좋다.
 
 * <a name="visibility"></a>
-  Assign proper visibility levels to methods (`private`, `protected`) in
-  accordance with their intended usage. Don't go off leaving everything `public`
-  (which is the default). After all we're coding in *Ruby* now, not in *Python*.
+  메소드에는 사용되는 목적에 맞는 접근 권한(`private`, `protected`)을 부여한다.
+  전부 다 기본 접근 권한인 `public` 상태로 두지 마라. 우리는 지금 *파이썬*이
+  아닌 *루비* 코딩을 하고 있다.(역자주 파이썬은 명시적인 private 메소드가 없다.)
 <sup>[[link](#visibility)]</sup>
 
 * <a name="indent-public-private-protected"></a>
-  Indent the `public`, `protected`, and `private` methods as much as the method
-  definitions they apply to. Leave one blank line above the visibility modifier
-  and one blank line below in order to emphasize that it applies to all methods
-  below it.
+  `public`, `protected`, `private`은 메소드 정의와 같은 레벨로 들여쓰기 한다.
+  접근 제한자 아래로 모든 메소드들이 적용된다는 것을 명확하게 하기 위해 접근
+  제한자 위, 아래로 빈 줄을 넣어 준다.
 <sup>[[link](#indent-public-private-protected)]</sup>
 
   ```Ruby
@@ -2570,41 +2495,40 @@ no parameters.
   ```
 
 * <a name="def-self-class-methods"></a>
-  Use `def self.method` to define class methods. This makes the code
-  easier to refactor since the class name is not repeated.
+  클래스 메소드를 정의할 때는 `def self.method`를 사용한다. 이렇게 하면
+  클래스명이 반복되지 않기 때문에 클래스명 변경으로 리펙토링할 때 좀 더 쉬워진다.
 <sup>[[link](#def-self-class-methods)]</sup>
 
   ```Ruby
   class TestClass
-    # bad
+    # 나쁜 예
     def TestClass.some_method
-      # body omitted
+      # body 생략
     end
 
-    # good
+    # 좋은 예
     def self.some_other_method
-      # body omitted
+      # body 생략
     end
 
-    # Also possible and convenient when you
-    # have to define many class methods.
+    # 클래스 메소드가 많은 경우 아래와 같이
+    # 사용하면 편리하다.
     class << self
       def first_method
-        # body omitted
+        # body 생략
       end
 
       def second_method_etc
-        # body omitted
+        # body 생략
       end
     end
   end
   ```
 
 * <a name="alias-method-lexically"></a>
-  Prefer `alias` when aliasing methods in lexical class scope as the
-  resolution of `self` in this context is also lexical, and it communicates
-  clearly to the user that the indirection of your alias will not be altered
-  at runtime or by any subclass unless made explicit.
+  엘리아스 메소드가 문법적 클래스의 범위에 있고 이 문맥에서 `self`의 범위도
+  문법적이고 alias의 접근이 명시적이지 않을 때의 실행시나 서브 클래스에서
+  변경되지 않는 것을 유저가 명확히 이해할 때는`alias`를 사용한다.
 <sup>[[link](#alias-method-lexically)]</sup>
 
   ```Ruby
@@ -2617,13 +2541,12 @@ no parameters.
   end
   ```
 
-  Since `alias`, like `def`, is a keyword, prefer bareword arguments over
-  symbols or strings. In other words, do `alias foo bar`, not
-  `alias :foo :bar`.
+  `alias`가 `def`같은 키워드이기 때문에, 심볼이나 문자열 대신, 생 인자를
+  사용한다. 다시 말하면, `alias :foo :bar`대신 `alias foo bar`를 사용한다.
 
-  Also be aware of how Ruby handles aliases and inheritance: an alias
-  references the method that was resolved at the time the alias was defined;
-  it is not dispatched dynamically.
+  또 루비가 어떻게 alias와 상속을 처리하는지 알아야한다: alias는
+  alias가 선언되었을 때의 메소드를 참조한다. alias는 동적으로 전달되지
+  않는다.
 
   ```Ruby
   class Fugitive < Westerner
@@ -2633,10 +2556,10 @@ no parameters.
   end
   ```
 
-  In this example, `Fugitive#given_name` would still call the original
-  `Westerner#first_name` method, not `Fugitive#first_name`. To override the
-  behavior of `Fugitive#given_name` as well, you'd have to redefine it in the
-  derived class.
+  이 예제에서, `Fugitive#given_name`는 `Fugitive#first_name`가 아니라
+  여전히 원래의 `Westerner#first_name` 메소드를 호출한다.
+  `Fugitive#given_name`의 행동으로 오버라이드 하려면 파생된 클래스에서도
+  재정의 해주어야 한다.
 
   ```Ruby
   class Fugitive < Westerner
@@ -2649,9 +2572,8 @@ no parameters.
   ```
 
 * <a name="alias-method"></a>
-  Always use `alias_method` when aliasing methods of modules, classes, or
-  singleton classes at runtime, as the lexical scope of `alias` leads to
-  unpredictability in these cases.
+  모듈, 클래스, 싱글턴 클래스를 실행중에 alias 할 때는 항상 `alias_method`
+  를 사용한다. 이런 경우에 `alias`의 문법적 범위로는 결과를 예측 하기 힘들다.
 <sup>[[link](#alias-method)]</sup>
 
   ```Ruby
@@ -2666,111 +2588,107 @@ no parameters.
   end
   ```
 
-## Exceptions
+## 예외
 
-* <a name="fail-method"></a>
-  Signal exceptions using the `fail` method. Use `raise` only when catching an
-  exception and re-raising it (because here you're not failing, but explicitly
-  and purposefully raising an exception).
-<sup>[[link](#fail-method)]</sup>
+* <a name="prefer-raise-over-fail"></a>
+  예외를 발생 시킬때 `fail`대신 `raise`를 사용한다.
+  <sup>[[link](#prefer-raise-over-fail)]</sup>
 
   ```Ruby
-  begin
-    fail 'Oops'
-  rescue => error
-    raise if error.message != 'Oops'
-  end
+  # 나쁜 예
+  fail SomeException, 'message'
+
+  # 좋은 예
+  raise SomeException, 'message'
   ```
 
 * <a name="no-explicit-runtimeerror"></a>
-  Don't specify `RuntimeError` explicitly in the two argument version of
-  `fail/raise`.
+  `raise`를 사용할 때 `RuntimeError`를 첫 번째 인수로 하는 메소드는 사용하지
+  않는다.
 <sup>[[link](#no-explicit-runtimeerror)]</sup>
 
   ```Ruby
-  # bad
-  fail RuntimeError, 'message'
+  # 나쁜 예
+  raise RuntimeError, 'message'
 
-  # good - signals a RuntimeError by default
-  fail 'message'
+  # 좋은 예 - 기본적으로 RuntimeError가 발생한다.
+  raise 'message'
   ```
 
 * <a name="exception-class-messages"></a>
-  Prefer supplying an exception class and a message as two separate arguments
-  to `fail/raise`, instead of an exception instance.
+  예외 인스턴스를 생성해서 `raise`를 하는 것보다 `raise`의 첫 번째
+  인수에 예외 클래스를 넘기는 메소드를 사용하는 것이 더 좋다.
 <sup>[[link](#exception-class-messages)]</sup>
 
   ```Ruby
-  # bad
-  fail SomeException.new('message')
-  # Note that there is no way to do `fail SomeException.new('message'), backtrace`.
+  # 나쁜 예
+  raise SomeException.new('message')
+  # `raise SomeException.new('message'), backtrace` 이렇게 쓸 수 는 없다.
 
-  # good
-  fail SomeException, 'message'
-  # Consistent with `fail SomeException, 'message', backtrace`.
+  # 좋은 예
+  raise SomeException, 'message'
+  # `raise SomeException, 'message', backtrace`와 일관성이 있다.
   ```
 
 * <a name="no-return-ensure"></a>
-  Do not return from an `ensure` block. If you explicitly return from a method
-  inside an `ensure` block, the return will take precedence over any exception
-  being raised, and the method will return as if no exception had been raised at
-  all. In effect, the exception will be silently thrown away.
+  `ensure` 블록에서 리턴하지 마라. `ensure` 안에서 명시적으로 리턴을 하면 예외가
+  발생하기 전에 리턴이 되고 예외가 발생하지 않은 것처럼 동작할 것이다.
 <sup>[[link](#no-return-ensure)]</sup>
 
   ```Ruby
   def foo
-    fail
+    raise
   ensure
-    return 'very bad idea'
+    return '매우 안좋은 생각'
   end
   ```
 
 * <a name="begin-implicit"></a>
-  Use *implicit begin blocks* where possible.
+  가독성 우선 원칙에 따라 begin 블럭을 허용하며 def/end 라인보다 들여쓴다. (**휴레이**)
 <sup>[[link](#begin-implicit)]</sup>
 
   ```Ruby
-  # bad
+  # 허용되는 예
   def foo
     begin
-      # main logic goes here
+      # 메인 로직은 여기에
     rescue
-      # failure handling goes here
+      # 실패처리는 여기에
     end
   end
 
-  # good
+  # 나쁜 예
   def foo
-    # main logic goes here
+    # 메인 로직은 여기에
   rescue
-    # failure handling goes here
+    # 실패처리는 여기에
   end
   ```
 
 * <a name="contingency-methods"></a>
-  Mitigate the proliferation of `begin` blocks by using *contingency methods*
-  (a term coined by Avdi Grimm).
+  `begin` 블록이 많아지는 것을 줄이기 위해서 *contingency 메소드*를 사용한다.
+  (용어는 Avdi Grimm가 만들었다).
 <sup>[[link](#contingency-methods)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   begin
     something_that_might_fail
   rescue IOError
-    # handle IOError
+    # IOError 처리
   end
 
   begin
     something_else_that_might_fail
   rescue IOError
-    # handle IOError
+    # IOError 처리
   end
 
-  # good
+  # 좋은 예
   def with_io_error_handling
      yield
   rescue IOError
-    # handle IOError
+    # IOError 처리
   end
 
   with_io_error_handling { something_that_might_fail }
@@ -2779,30 +2697,30 @@ no parameters.
   ```
 
 * <a name="dont-hide-exceptions"></a>
-  Don't suppress exceptions.
+  예외를 먹지 마라.
 <sup>[[link](#dont-hide-exceptions)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   begin
-    # an exception occurs here
+    # 여기에서 예외가 발생한다.
   rescue SomeError
-    # the rescue clause does absolutely nothing
+    # rescue 절에서 아무것도 하지 않는다.
   end
 
-  # bad
+  # 나쁜 예
   do_something rescue nil
   ```
 
 * <a name="no-rescue-modifiers"></a>
-  Avoid using `rescue` in its modifier form.
+  `rescue`를 사용할 때 구문 변경자 사용을 피한다.
 <sup>[[link](#no-rescue-modifiers)]</sup>
 
   ```Ruby
-  # bad - this catches exceptions of StandardError class and its descendant classes
+  # 나쁜 예 - 여기서 StandardError 예외와 StandardError를 상속한 예외들을 잡는다.
   read_file rescue handle_error($!)
 
-  # good - this catches only the exceptions of Errno::ENOENT class and its descendant classes
+  # 좋은 예 - 여기서 Error::ENOENT 예외와 Error:ENOENT를 상속한 예외들만 잡는다.
   def foo
     read_file
   rescue Errno::ENOENT => ex
@@ -2811,18 +2729,18 @@ no parameters.
   ```
 
 * <a name="no-exceptional-flows"></a>
-  Don't use exceptions for flow of control.
+  예외를 흐름 제어에 사용하지 마라.
 <sup>[[link](#no-exceptional-flows)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   begin
     n / d
   rescue ZeroDivisionError
     puts 'Cannot divide by 0!'
   end
 
-  # good
+  # 좋은 예
   if d.zero?
     puts 'Cannot divide by 0!'
   else
@@ -2831,63 +2749,67 @@ no parameters.
   ```
 
 * <a name="no-blind-rescues"></a>
-  Avoid rescuing the `Exception` class.  This will trap signals and calls to
-  `exit`, requiring you to `kill -9` the process.
+  `Exception`을 rescue 하는 것을 피한다. 그렇게 하면 `exit`를 잡기 위해서
+  프로세스에 `kill -9`가 필요하다.(역자주 Exception은 루비의 최상위 예외
+  클래스인데 Interrupt나 SyntaxError 등도 포함된다. Interrupt를 rescue 하면
+  Ctrl+C로 프로그램을 종료할 수 없다. `kill -9`로는 종료가 가능하다. 또
+  eval 등으로 동적으로 코드를 로드할 때 발생할지도 모르는 SyntaxError도 예상치
+  못하게 잡게 되어 적절한 처리를 못할지도 모른다.
+  http://stackoverflow.com/questions/10048173/why-is-it-bad-style-to-rescue-exception-e-in-ruby)
 <sup>[[link](#no-blind-rescues)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   begin
-    # calls to exit and kill signals will be caught (except kill -9)
+    # exit를 호출하면 kill 시그널이 잡힌다.(kill -9는 제외)
     exit
   rescue Exception
     puts "you didn't really want to exit, right?"
-    # exception handling
+    # 예외 처리
   end
 
-  # good
+  # 좋은 예
   begin
-    # a blind rescue rescues from StandardError, not Exception as many
-    # programmers assume.
+    # 많은 개발자들의 예상하는 Exception 대신 StandardError를 잡게된다.
   rescue => e
-    # exception handling
+    # 예외 처리
   end
 
-  # also good
+  # 이것도 좋은 예
   begin
-    # an exception occurs here
+    # 여기서 예외 발생
   rescue StandardError => e
-    # exception handling
+    # 예외 처리
   end
   ```
 
 * <a name="exception-ordering"></a>
-  Put more specific exceptions higher up the rescue chain, otherwise they'll
-  never be rescued from.
+  rescue를 이어서 사용할 때는 더 구체적인 예외부터 순서대로 작성한다. 그렇지
+  않으면 rescue에 안 걸릴 수 있다.
 <sup>[[link](#exception-ordering)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   begin
-    # some code
+    # 코드
   rescue StandardError => e
-    # some handling
+    # 예외 처리
   rescue IOError => e
-    # some handling that will never be executed
+    # 여기는 실행되지 않는다.
   end
 
-  # good
+  # 좋은 예
   begin
-    # some code
+    # 코드
   rescue IOError => e
-    # some handling
+    # 예외 처리
   rescue StandardError => e
-    # some handling
+    # 에외 처리
   end
   ```
 
 * <a name="release-resources"></a>
-  Release external resources obtained by your program in an `ensure` block.
+  `ensure` 블록에서 사용했던 자원을 모두 반환한다.
 <sup>[[link](#release-resources)]</sup>
 
   ```Ruby
@@ -2897,271 +2819,260 @@ no parameters.
   rescue
     # .. handle error
   ensure
-    f.close if f
+    f.close unless f.nil?
   end
   ```
 
 * <a name="auto-release-resources"></a>
-Use versions of resource obtaining methods that do automatic
-resource cleanup when possible.
+  가능한 한 자동으로 리소스를 정리해주는 버전의 메소드를 사용한다.
 <sup>[[link](#auto-release-resources)]</sup>
 
   ```Ruby
-  # bad - you need to close the file descriptor explicitly
+  # 나쁜 예 - 파일 서술자를 명시적으로 닫아야 함
   f = File.open('testfile')
     # ...
   f.close
 
-  # good - the file descriptor is closed automatically
+  # 좋은 예 - 파일 서술자가 자동으로 닫힘
   File.open('testfile') do |f|
     # ...
   end
   ```
 
 * <a name="standard-exceptions"></a>
-  Favor the use of exceptions for the standard library over introducing new
-  exception classes.
+  표준 라이브러리에 있는 예외보다는 새로운 예외 클래스를 만들어 사용하는 것이
+  더 좋다.
 <sup>[[link](#standard-exceptions)]</sup>
 
-## Collections
+## 컬렉션
 
 * <a name="literal-array-hash"></a>
-  Prefer literal array and hash creation notation (unless you need to pass
-  parameters to their constructors, that is).
+  배열과 해시 생성 노테이션을 사용한다.(생성자에 매개변수를 전달하지 않는다면)
 <sup>[[link](#literal-array-hash)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   arr = Array.new
   hash = Hash.new
 
-  # good
+  # 좋은 예
   arr = []
   hash = {}
   ```
 
 * <a name="percent-w"></a>
-  Prefer `%w` to the literal array syntax when you need an array of words
-  (non-empty strings without spaces and special characters in them).  Apply this
-  rule only to arrays with two or more elements.
+  단어에 대한 배열이 필요할 때는 `%w` 리터럴을 사용한다.(공백이나 특수문자가
+  없는 비어 있지 않은 문자열) 두 개 이상의 항목을 가질 때만 이 규칙을 적용한다.
 <sup>[[link](#percent-w)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   STATES = ['draft', 'open', 'closed']
 
-  # good
+  # 좋은 예
   STATES = %w(draft open closed)
   ```
 
 * <a name="percent-i"></a>
-  Prefer `%i` to the literal array syntax when you need an array of symbols
-  (and you don't need to maintain Ruby 1.9 compatibility). Apply this rule only
-  to arrays with two or more elements.
+  심볼에 대한 배열이 필요할 때는 `%i` 리터럴을 사용한다.(루비 1.9와 호환성이
+  필요 없는 경우) 두 개 이상의 항목을 가질 때만 이 규칙을 적용한다.
 <sup>[[link](#percent-i)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   STATES = [:draft, :open, :closed]
 
-  # good
+  # 좋은 예
   STATES = %i(draft open closed)
   ```
 
 * <a name="no-trailing-array-commas"></a>
-  Avoid comma after the last item of an `Array` or `Hash` literal, especially
-  when the items are not on separate lines.
+  배열이나 해시의 마지막 항목에 콤마를 사용하지 마라. 특히 항목이 여러 줄로
+  나뉘어 있는 경우가 아니라면 더 사용하지 마라.
 <sup>[[link](#no-trailing-array-commas)]</sup>
 
   ```Ruby
-  # bad - easier to move/add/remove items, but still not preferred
+  # 나쁜 예 - 항목을 이동/추가/삭제 하는 것이 쉽지만 사용하지 마라.
   VALUES = [
              1001,
              2020,
              3333,
            ]
 
-  # bad
+  # 나쁜 예
   VALUES = [1001, 2020, 3333, ]
 
-  # good
+  # 좋은 예
   VALUES = [1001, 2020, 3333]
   ```
 
 * <a name="no-gappy-arrays"></a>
-  Avoid the creation of huge gaps in arrays.
+  큰 빈 공간을 가진 배열을 생성하지 마라.
 <sup>[[link](#no-gappy-arrays)]</sup>
 
   ```Ruby
   arr = []
-  arr[100] = 1 # now you have an array with lots of nils
+  arr[100] = 1 # 많은 nil 값을 가지는 배열이 생성되었다.
   ```
 
 * <a name="first-and-last"></a>
-  When accessing the first or last element from an array, prefer `first` or
-  `last` over `[0]` or `[-1]`.
+  배열의 첫 번째나 마지막 항목에 접근할 때 `[0]` 또는 `[-1]` 대신 `first`나
+  `last`를 사용하라.
 <sup>[[link](#first-and-last)]</sup>
 
 * <a name="set-vs-array"></a>
-  Use `Set` instead of `Array` when dealing with unique elements. `Set`
-  implements a collection of unordered values with no duplicates. This is a
-  hybrid of `Array`'s intuitive inter-operation facilities and `Hash`'s fast
-  lookup.
+  유일한 항목을 다룰 때는 `Array` 대신 `Set`을 사용하라. `Set`은 중복이 없고
+  정렬되지 않은 항목을 다룰 수 있는 컬렉션 구현체이다. `Set`은 배열의 직관적인
+  동작들과 `Hash`의 빠른 조회 특성을 모두 가지고 있다.
 <sup>[[link](#set-vs-array)]</sup>
 
 * <a name="symbols-as-keys"></a>
-  Prefer symbols instead of strings as hash keys.
+  해시 키는 문자열 보다 심볼을 사용하는 것이 좋다.
 <sup>[[link](#symbols-as-keys)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   hash = { 'one' => 1, 'two' => 2, 'three' => 3 }
 
-  # good
+  # 좋은 예
   hash = { one: 1, two: 2, three: 3 }
   ```
 
 * <a name="no-mutable-keys"></a>
-  Avoid the use of mutable objects as hash keys.
+  변경 가능한 객체를 해시 키로 사용하지 마라.
 <sup>[[link](#no-mutable-keys)]</sup>
 
 * <a name="hash-literals"></a>
-  Use the Ruby 1.9 hash literal syntax when your hash keys are symbols.
+  해시 키가 심볼인 경우 루비 1.9 해시 리터럴을 사용하라.
 <sup>[[link](#hash-literals)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   hash = { :one => 1, :two => 2, :three => 3 }
 
-  # good
+  # 좋은 예
   hash = { one: 1, two: 2, three: 3 }
   ```
 
 * <a name="no-mixed-hash-syntaces"></a>
-  Don't mix the Ruby 1.9 hash syntax with hash rockets in the same hash
-  literal. When you've got keys that are not symbols stick to the hash rockets
-  syntax.
+  하나의 해시에 루비 1.9 해시 문법과 기존 해시 문법을 섞어 쓰지 마라. 심볼이
+  아닌 키가 포함되어 있다면 이전의 해시 문법을 사용하라.
 <sup>[[link](#no-mixed-hash-syntaces)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   { a: 1, 'b' => 2 }
 
-  # good
+  # 좋은 예
   { :a => 1, 'b' => 2 }
   ```
 
 * <a name="hash-key"></a>
-  Use `Hash#key?` instead of `Hash#has_key?` and `Hash#value?` instead of
-  `Hash#has_value?`. As noted
-  [here](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/43765) by
-  Matz, the longer forms are considered deprecated.
+  `Hash#has_key?` 대신 `Hash#key?`, `Hash#has_value?` 대신 `Hash#value?`를
+  사용하라. Matz에 의하면 긴 문법은 폐지하는 것을 논의 중이다.
+  [here](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-core/43765)
 <sup>[[link](#hash-key)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   hash.has_key?(:test)
   hash.has_value?(value)
 
-  # good
+  # 좋은 예
   hash.key?(:test)
   hash.value?(value)
   ```
 
 * <a name="hash-fetch"></a>
-  Use `Hash#fetch` when dealing with hash keys that should be present.
+  해시 키로 명확히 있어야 하는 값을 다룰 때에는 `Hash#fetch`를 사용하라.
 <sup>[[link](#hash-fetch)]</sup>
 
   ```Ruby
   heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
-  # bad - if we make a mistake we might not spot it right away
-  heroes[:batman] # => "Bruce Wayne"
+  # 나쁜 예 - 만약 실수가 있다고 한다면 알아채지 못할 수 있다.
+  heroes[:batman] # => 'Bruce Wayne'
   heroes[:supermann] # => nil
 
-  # good - fetch raises a KeyError making the problem obvious
+  # 좋은 예 - 문제를 명확하게 하기 위해서 KeyError 예외가 발생한다.
   heroes.fetch(:supermann)
   ```
 
 * <a name="hash-fetch-defaults"></a>
-  Introduce default values for hash keys via `Hash#fetch` as opposed to using
-  custom logic.
+  해시 값에 기본 값을 사용하는 경우 커스텀 로직보다는 `Hash#fetch`를 사용하라.
 <sup>[[link](#hash-fetch-defaults)]</sup>
 
   ```Ruby
   batman = { name: 'Bruce Wayne', is_evil: false }
 
-  # bad - if we just use || operator with falsy value we won't get the expected result
+  # 나쁜 예 - 그냥 || 연산자를 사용한다면 예상하지 못한 결과를 얻을 수도 있다.
   batman[:is_evil] || true # => true
 
-  # good - fetch work correctly with falsy values
+  # 좋은 예 - 제대로 된 false 값을 얻을 수 있다.
   batman.fetch(:is_evil, true) # => false
   ```
 
 * <a name="use-hash-blocks"></a>
-  Prefer the use of the block instead of the default value in `Hash#fetch`
-  if the code that has to be evaluated may have side effects or be expensive.
+  `Hash#fetch` 기본 값 대신 블록을 사용하는 것이 좋다.
+  실행해야 할 코드는 부작용이 있을 수도 있고, 실행 비용이 비쌀 수도 있다.
   <sup>[[link](#use-hash-blocks)]</sup>
 
   ```Ruby
   batman = { name: 'Bruce Wayne' }
 
-  # bad - if we use the default value, we eager evaluate it
-  # so it can slow the program down if done multiple times
-  batman.fetch(:powers, obtain_batman_powers) # obtain_batman_powers is an expensive call
+  # 나쁜 예 - 만약 기본 값을 사용하는 경우, 함수가 먼저 실행이 되므로
+  # 여러 번 실행되는 경우 프로그램이 느려질 수 있다.
+  batman.fetch(:powers, obtain_batman_powers) # obtain_batman_powers는 오래 걸리는 함수이다.
 
-  # good - blocks are lazy evaluated, so only triggered in case of KeyError exception
+  # good - 블록은 나중에 실행된다. 그래서 KeyError 예외가 발생하는 경우만 실행된다.
   batman.fetch(:powers) { obtain_batman_powers }
   ```
 
 * <a name="hash-values-at"></a>
-  Use `Hash#values_at` when you need to retrieve several values consecutively
-  from a hash.
+  해시에서 여러 개의 값을 가져오고 싶다면 `Hash#values_at`을 사용하라.
 <sup>[[link](#hash-values-at)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   email = data['email']
   username = data['nickname']
 
-  # good
+  # 좋은 예
   email, username = data.values_at('email', 'nickname')
   ```
 
 * <a name="ordered-hashes"></a>
-  Rely on the fact that as of Ruby 1.9 hashes are ordered.
+  Ruby 1.9의 해시는 순서가 보장된다는 것을 기억하자.
 <sup>[[link](#ordered-hashes)]</sup>
 
 * <a name="no-modifying-collections"></a>
-  Do not modify a collection while traversing it.
+  컬렉션을 순회하는 동안 컬렉션을 수정하지 마라.
 <sup>[[link](#no-modifying-collections)]</sup>
 
 * <a name="accessing-elements-directly"></a>
-  When accessing elements of a collection, avoid direct access
-  via `[n]` by using an alternate form of the reader method if it is
-  supplied. This guards you from calling `[]` on `nil`.
+  컬렉션의 요소에 접근할 때는, 가능한 한 리더 메소드의 다른 형식을 사용해 `[n]`을
+  통한 직접 접근을 피한다. 이는 `nil`에 `[]`를 호출하는 것을 방지한다.
 <sup>[[link](#accessing-elements-directly)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   Regexp.last_match[1]
 
-  # good
+  # 좋은 예
   Regexp.last_match(1)
   ```
 
 * <a name="provide-alternate-accessor-to-collections"></a>
-  When providing an accessor for a collection, provide an alternate form
-  to save users from checking for `nil` before accessing an element in
-  the collection.
+  컬렉션의 접근자를 만들 때에는, 다른 형식을 제공해 사용자가 컬렉션의 요소에
+  접근하기 전에 `nil`을 체크하지 않도록 한다.
 <sup>[[link](#provide-alternate-accessor-to-collections)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   def awesome_things
     @awesome_things
   end
 
-  # good
+  # 좋은 예
   def awesome_things(index = nil)
     if index && @awesome_things
       @awesome_things[index]
@@ -3171,84 +3082,80 @@ resource cleanup when possible.
   end
   ```
 
-## Strings
+## 문자열
 
-* <a name="string-interpolation"></a>
-  Prefer string interpolation and string formatting instead of string
-  concatenation:
-<sup>[[link](#string-interpolation)]</sup>
+* <a name="pad-string-interpolation"></a>
+  문자열을 합치는 것보다 포맷팅이나 문자열 삽입을 사용하는 것이 더 좋다.
+<sup>[[link](#pad-string-interpolation)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   email_with_name = user.name + ' <' + user.email + '>'
 
-  # good
+  # 좋은 예
   email_with_name = "#{user.name} <#{user.email}>"
 
-  # good
+  # 좋은 예
   email_with_name = format('%s <%s>', user.name, user.email)
   ```
 
 * <a name="string-interpolation"></a>
-  With interpolated expressions, there should be no padded-spacing inside the braces.
-<sup>[[link](#string-interpolation)]</sup>
+  보간 표현식에서, 괄호 양 옆에 스페이스를 넣지 않는 것이 좋다.
 
   ```Ruby
-  # bad
+  # 나쁜 예
   "From: #{ user.first_name }, #{ user.last_name }"
 
-  # good
+  # 좋은 예
   "From: #{user.first_name}, #{user.last_name}"
   ```
+<sup>[[link](#string-interpolation)]</sup>
 
 * <a name="consistent-string-literals"></a>
-  Adopt a consistent string literal quoting style. There are two popular
-  styles in the Ruby community, both of which are considered good - single
-  quotes by default (Option A) and double quotes by default (Option B).
+  일관된 문자열 따옴표 스타일을 선택한다. 루비 커뮤니티에는 많이 사용하는 두 가지
+  스타일이 있는데 둘 다 괜찮다. 하나는 작은따옴표를 사용하는 방식(A 방식)이고
+  다른 하나는 큰따옴표를 사용하는 방식이다(B 방식).
 <sup>[[link](#consistent-string-literals)]</sup>
 
-  * **(Option A)** Prefer single-quoted strings when you don't need
-    string interpolation or special symbols such as `\t`, `\n`, `'`,
-    etc.
+  * **(A 방식)**`\t`, `\n`, `'` 등의 특수문자나 문자열 삽입이 필요 없는 경우는
+    작은따옴표를 사용하는 것이 좋다.
 
     ```Ruby
-    # bad
+    # 나쁜 예
     name = "Bozhidar"
 
-    # good
+    # 좋은 예
     name = 'Bozhidar'
     ```
 
-  * **(Option B)** Prefer double-quotes unless your string literal
-    contains `"` or escape characters you want to suppress.
+  * **(B 방식)** `"`를 포함하지 않거나 이스케이프된 특수문자를 제한할 필요가
+    없는 경우에는 큰따옴표를 사용한다.
 
     ```Ruby
-    # bad
+    # 나쁜 예
     name = 'Bozhidar'
 
-    # good
+    # 좋은 예
     name = "Bozhidar"
     ```
 
-  The string literals in this guide are aligned with the first style.
+  이 가이드에서 문자열 리터럴은 첫 번째 스타일로 통일한다.
 
 * <a name="no-character-literals"></a>
-  Don't use the character literal syntax `?x`. Since Ruby 1.9 it's basically
-  redundant - `?x` would interpreted as `'x'` (a string with a single character
-  in it).
+  문자 리터럴인 `?x`는 사용하지 않는다. 루비 1.9에서는 기본적으로 필요 없다.
+  `?x`는 `'x'`로 해석된다.(문자 하나가 포함된 문자열)
 <sup>[[link](#no-character-literals)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   char = ?c
 
-  # good
+  # 좋은 예
   char = 'c'
   ```
 
 * <a name="curlies-interpolate"></a>
-  Don't leave out `{}` around instance and global variables being interpolated
-  into a string.
+  인스턴스 변수나 글로벌 변수를 가지고 문자열 삽입하는 경우 `{}`를 없애지 마라.
 <sup>[[link](#curlies-interpolate)]</sup>
 
   ```Ruby
@@ -3260,47 +3167,45 @@ resource cleanup when possible.
       @last_name = last_name
     end
 
-    # bad - valid, but awkward
+    # 나쁜 예 - 동작하지만 어색함
     def to_s
       "#@first_name #@last_name"
     end
 
-    # good
+    # 좋은 예
     def to_s
       "#{@first_name} #{@last_name}"
     end
   end
 
   $global = 0
-  # bad
+  # 나쁜 예
   puts "$global = #$global"
 
-  # good
+  # 좋은 예
   puts "$global = #{$global}"
   ```
 
 * <a name="no-to-s"></a>
-  Don't use `Object#to_s` on interpolated objects. It's invoked on them
-  automatically.
+  문자열 삽입에 `Object#to_s`를 사용하지 마라. 이건 자동으로 호출된다.
 <sup>[[link](#no-to-s)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   message = "This is the #{result.to_s}."
 
-  # good
+  # 좋은 예
   message = "This is the #{result}."
   ```
 
 * <a name="concat-strings"></a>
-  Avoid using `String#+` when you need to construct large data chunks.
-  Instead, use `String#<<`. Concatenation mutates the string instance in-place
-  and is always faster than `String#+`, which creates a bunch of new string
-  objects.
+  큰 문자열 데이터가 필요할 때 `String#+`를 사용하지 마라. 대신 `String#<<`를
+  사용하라. 문자열 자체를 변경하는 것이 새로운 문자열 객체를 생성하는
+  `String#+`보다 항상 빠르다.
 <sup>[[link](#concat-strings)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   html = ''
   html += '<h1>Page title</h1>'
 
@@ -3308,7 +3213,7 @@ resource cleanup when possible.
     html += "<p>#{paragraph}</p>"
   end
 
-  # good and also fast
+  # 좋고 더 빠르다
   html = ''
   html << '<h1>Page title</h1>'
 
@@ -3318,26 +3223,25 @@ resource cleanup when possible.
   ```
 
 * <a name="dont-abuse-gsub"></a>
-  Don't use `String#gsub` in scenarios in which you can use a faster more specialized alternative.
+  다른 더 빠른 대안이 있을 때 `String#gsub`를 사용하지 마라.
 <sup>[[link](#dont-abuse-gsub)]</sup>
 
     ```Ruby
     url = 'http://example.com'
     str = 'lisp-case-rules'
 
-    # bad
-    url.gsub("http://", "https://")
-    str.gsub("-", "_")
+    # 나쁜 예
+    url.gsub('http://', 'https://')
+    str.gsub('-', '_')
 
-    # good
-    url.sub("http://", "https://")
-    str.tr("-", "_")
+    # 좋은 예
+    url.sub('http://', 'https://')
+    str.tr('-', '_')
     ```
 
 * <a name="heredocs"></a>
-  When using heredocs for multi-line strings keep in mind the fact that they
-  preserve leading whitespace. It's a good practice to employ some margin based
-  on which to trim the excessive whitespace.
+  여러 줄로 heredoc을 사용할 때 공백 문자들이 유지된다는 사실을 잊지 말자. 특정
+  기준을 정하고 나머지 불필요한 공백을 모두 없애는 것이 좋은 방법이다.
 <sup>[[link](#heredocs)]</sup>
 
   ```Ruby
@@ -3350,92 +3254,91 @@ resource cleanup when possible.
   # => "def test\n  some_method\n  other_method\nend\n"
   ```
 
-## Regular Expressions
+## 정규식
 
-> Some people, when confronted with a problem, think
-> "I know, I'll use regular expressions." Now they have two problems.<br>
+> 어떤 사람들은 문제에 직면했을 때 다음과 같이 생각한다.<br>
+> "음 알았어, 난 정규식을 사용 할 거야." 이제 그들에게는 두 개의 문제가 생겼다.<br>
 > -- Jamie Zawinski
 
 * <a name="no-regexp-for-plaintext"></a>
-  Don't use regular expressions if you just need plain text search in string:
-  `string['text']`
+  문자열 안에 단순한 텍스트를 찾는 것이라면 정규식을 사용하지 마라. `string['text']`
 <sup>[[link](#no-regexp-for-plaintext)]</sup>
 
 * <a name="regexp-string-index"></a>
-  For simple constructions you can use regexp directly through string index.
+  간단한 생성을 위해서 문자열 인덱스에 정규식을 바로 사용할 수 있다.
 <sup>[[link](#regexp-string-index)]</sup>
 
   ```Ruby
-  match = string[/regexp/]             # get content of matched regexp
-  first_group = string[/text(grp)/, 1] # get content of captured group
-  string[/text (grp)/, 1] = 'replace'  # string => 'text replace'
+  match = string[/regexp/]             # regexp과 매칭 되는 문자열을 가져온다.
+  first_group = string[/text(grp)/, 1] # 정규식 그룹에 있는 값을 뽑아 낸다.
+  string[/text (grp)/, 1] = 'replace'  # 정규식 그룹에 있는 값을 새로운 값으로 바꾼다.
   ```
 
 * <a name="non-capturing-regexp"></a>
-  Use non-capturing groups when you don't use the captured result.
+  정규식 그룹에서 값을 뽑아서 사용하지 않는다면 non-capturing 그룹을 사용하라.
 <sup>[[link](#non-capturing-regexp)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   /(first|second)/
 
-  # good
+  # 좋은 예
   /(?:first|second)/
   ```
 
 * <a name="no-perl-regexp-last-matchers"></a>
-  Don't use the cryptic Perl-legacy variables denoting last regexp group
-  matches (`$1`, `$2`, etc). Use `Regexp.last_match(n)` instead.
+  정규식 그룹에서 값을 사용할 때(`$1`, `$2` 등)처럼 암호문 같은 펄 변수
+  기호를 사용하지 마라. 대신 `Regexp.last_match(n)`를 사용하라.
 <sup>[[link](#no-perl-regexp-last-matchers)]</sup>
 
   ```Ruby
   /(regexp)/ =~ string
   ...
 
-  # bad
+  # 나쁜 예
   process $1
 
-  # good
+  # 좋은 예
   process Regexp.last_match(1)
   ```
 
 * <a name="no-numbered-regexes"></a>
-  Avoid using numbered groups as it can be hard to track what they contain.
-  Named groups can be used instead.
+  정규식 그룹에서 값을 사용할 때 숫자 형식은 안에 뭐가 있는지 알아보기 힘들기
+  때문에 사용을 피한다. 대신 이름 기반의 정규식 그룹을 사용한다.
 <sup>[[link](#no-numbered-regexes)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   /(regexp)/ =~ string
   ...
   process Regexp.last_match(1)
 
-  # good
+  # 좋은 예
   /(?<meaningful_var>regexp)/ =~ string
   ...
   process meaningful_var
   ```
 
 * <a name="limit-escapes"></a>
-  Character classes have only a few special characters you should care about:
-  `^`, `-`, `\`, `]`, so don't escape `.` or brackets in `[]`.
+  문자들 중에 몇 개의 문자(`^`, `-`, `\`, `]`)만 특수문자로 다뤄지기 때문에
+  `[]` 안에서 `.`을 이스케이프 하면 안 된다.
 <sup>[[link](#limit-escapes)]</sup>
 
 * <a name="caret-and-dollar-regexp"></a>
-  Be careful with `^` and `$` as they match start/end of line, not string
-  endings.  If you want to match the whole string use: `\A` and `\z` (not to be
-  confused with `\Z` which is the equivalent of `/\n?\z/`).
+  줄의 시작과 끝을 다루는 `^`와 `$`는 문자열의 시작과 끝이 아니기 때문에
+  주의해서 사용해야 한다. 만약 문자열 전체를 매칭하는 경우에는 `\A`와 `\z`를
+  사용한다.(`/\n?\z/`와 같은 `\Z`와 혼동하지 않는다.)
 <sup>[[link](#caret-and-dollar-regexp)]</sup>
 
   ```Ruby
   string = "some injection\nusername"
-  string[/^username$/]   # matches
-  string[/\Ausername\z/] # doesn't match
+  string[/^username$/]   # 찾음
+  string[/\Ausername\z/] # 못 찾음
   ```
 
 * <a name="comment-regexes"></a>
-  Use `x` modifier for complex regexps. This makes them more readable and you
-  can add some useful comments. Just be careful as spaces are ignored.
+  복잡한 정규식에 `x`를 사용한다. `x`를 사용하면 좀 더 읽기 좋아지고 유용한
+  주석도 추가할 수 있다. 공백이 무시되는 것에 주의 한다.
 <sup>[[link](#comment-regexes)]</sup>
 
   ```Ruby
@@ -3449,7 +3352,7 @@ resource cleanup when possible.
   ```
 
 * <a name="gsub-blocks"></a>
-  For complex replacements `sub`/`gsub` can be used with a block or a hash.
+  `sub`/`gsub`를 사용해서 복잡한 치환을 하는 경우 블록이나 해시를 사용할 수 있다.
 <sup>[[link](#gsub-blocks)]</sup>
 
   ```Ruby
@@ -3458,44 +3361,42 @@ resource cleanup when possible.
   words.gsub(/\w+/) { |word| word.capitalize } # => 'Foo Bar'
   ```
 
-## Percent Literals
+## 퍼센트 리터럴
 
 * <a name="percent-q-shorthand"></a>
-  Use `%()`(it's a shorthand for `%Q`) for single-line strings which require
-  both interpolation and embedded double-quotes. For multi-line strings, prefer
-  heredocs.
+  큰따옴표와 문자열 삽입이 필요한 한 줄 문자열에만 `%()`(`%Q`의 짧은 표현)를
+  사용한다. 여러 줄의 문자열은 heredoc을 사용한다.
 <sup>[[link](#percent-q-shorthand)]</sup>
 
   ```Ruby
-  # bad (no interpolation needed)
+  # 나쁜 예(문자열 삽입이 없다)
   %(<div class="text">Some text</div>)
   # should be '<div class="text">Some text</div>'
 
-  # bad (no double-quotes)
+  # 나쁜 예(큰따옴표가 없다)
   %(This is #{quality} style)
   # should be "This is #{quality} style"
 
-  # bad (multiple lines)
+  # 나쁜 예(여러 줄이다)
   %(<div>\n<span class="big">#{exclamation}</span>\n</div>)
   # should be a heredoc.
 
-  # good (requires interpolation, has quotes, single line)
+  # 좋은 예(한 줄에 큰따옴표와 문자열 삽입이 필요하다)
   %(<tr><td class="name">#{name}</td>)
   ```
 
 * <a name="percent-q"></a>
-  Avoid `%q` unless you have a string with both `'` and `"` in it. Regular
-  string literals are more readable and should be preferred unless a lot of
-  characters would have to be escaped in them.
+  `'`와 `"`가 둘 다 들어있는 문자열이 아닌 경우에 `%q` 사용을 피한다. 일반 문자열
+  리터럴이 더 읽기 좋고 이스케이프 할 문자가 많지 않은 경우에는 더 좋다.
 <sup>[[link](#percent-q)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   name = %q(Bruce Wayne)
   time = %q(8 o'clock)
   question = %q("What did you say?")
 
-  # good
+  # 좋은 예
   name = 'Bruce Wayne'
   time = "8 o'clock"
   question = '"What did you say?"'
@@ -3503,82 +3404,78 @@ resource cleanup when possible.
   ```
 
 * <a name="percent-r"></a>
-  Use `%r` only for regular expressions matching *at least* one '/'
-  character.
+  *적어도* 하나의 '/' 문자가 있는 경우에만 `%r`을 사용한다.
 <sup>[[link](#percent-r)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   %r{\s+}
 
-  # good
+  # 좋은 예
   %r{^/(.*)$}
   %r{^/blog/2011/(.*)$}
   ```
 
 * <a name="percent-x"></a>
-  Avoid the use of `%x` unless you're going to invoke a command with
-  backquotes in it(which is rather unlikely).
+  실행하려는 명령어 안에 역따옴표가 있는 경우에만(흔하지는 않지만) `%x`를 사용한다.
 <sup>[[link](#percent-x)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   date = %x(date)
 
-  # good
+  # 좋은 예
   date = `date`
   echo = %x(echo `date`)
   ```
 
 * <a name="percent-s"></a>
-  Avoid the use of `%s`. It seems that the community has decided `:"some
-  string"` is the preferred way to create a symbol with spaces in it.
+  `%s`의 사용은 피한다. 루비 커뮤니티에서는 공백이 포함된 심볼을 만들 때는
+  `:"문자열"`을 사용하기로 결정한 것으로 보인다.
 <sup>[[link](#percent-s)]</sup>
 
 * <a name="percent-literal-braces"></a>
-  Prefer `()` as delimiters for all `%` literals, except `%r`. Since parentheses
-  often appear inside regular expressions in many scenarios a less common
-  character like `{` might be a better choice for a delimiter, depending on the
-  regexp's content.
+  `%r`을 빼고 모든 `%` 리터럴의 구분자는 `()`를 사용한다. 정규식에서는 괄호가
+  나오는 경우가 흔하기 때문에 `%r`은 구분자로 `{`를 사용하는 것이 더 좋다.
 <sup>[[link](#percent-literal-braces)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   %w[one two three]
   %q{"Test's king!", John said.}
 
-  # good
+  # 좋은 예
   %w(one two three)
   %q("Test's king!", John said.)
   ```
 
-## Metaprogramming
+## 메타프로그래밍
 
 * <a name="no-needless-metaprogramming"></a>
-  Avoid needless metaprogramming.
+  쓸데없는 메타프로그래밍은 하지 마라.
 <sup>[[link](#no-needless-metaprogramming)]</sup>
 
 * <a name="no-monkey-patching"></a>
-  Do not mess around in core classes when writing libraries.  (Do not
-  monkey-patch them.)
+  라이브러리를 작성할 때 코어 클래스를 망쳐놓지 마라.(거기에 Monkey-patch를
+  하지 마라.)
 <sup>[[link](#no-monkey-patching)]</sup>
 
 * <a name="block-class-eval"></a>
-  The block form of `class_eval` is preferable to the string-interpolated
-  form.  - when you use the string-interpolated form, always supply `__FILE__`
-  and `__LINE__`, so that your backtraces make sense:
+  `class_eval` 폼 블록은 문자열 삽입 폼보다 더 좋다.
 <sup>[[link](#block-class-eval)]</sup>
 
-  ```ruby
-  class_eval 'def use_relative_model_naming?; true; end', __FILE__, __LINE__
-  ```
+  - 문자열 삽입 폼을 사용할 때는 백트레이스를 위해서 항상 `__FILE__`과
+    `__LINE__`을 써야 한다.
 
-  - `define_method` is preferable to `class_eval{ def ... }`
+    ```ruby
+    class_eval 'def use_relative_model_naming?; true; end', __FILE__, __LINE__
+    ```
+
+  - `define_method`가 `class_eval{ def ... }`보다 좋다.
 
 * <a name="eval-comment-docs"></a>
-  When using `class_eval` (or other `eval`) with string interpolation, add a
-  comment block showing its appearance if interpolated (a practice used in Rails
-  code):
+  문자열 삽입과 함께 `class_eval`(또는 다른 `eval`)을 사용할 때는 실행되어
+  보여지게 될 코드를 주석으로 추가한다.(레일즈 코드를 참고)
 <sup>[[link](#eval-comment-docs)]</sup>
 
   ```ruby
@@ -3600,29 +3497,30 @@ resource cleanup when possible.
   ```
 
 * <a name="no-method-missing"></a>
-  Avoid using `method_missing` for metaprogramming because backtraces become
-  messy, the behavior is not listed in `#methods`, and misspelled method calls
-  might silently work, e.g. `nukes.launch_state = false`. Consider using
-  delegation, proxy, or `define_method` instead. If you must use
-  `method_missing`:
+  백트레이스 할 때 `#methods` 리스트에 출력되지 않고 메소드 호출에 오타가 있는
+  경우에(예를 들어 `nukes.launch_state = false`) 발견되지 않기 때문에 메타
+  프로그래밍에서 `method_missing`을 사용하지 않는다. 대신 델리게이션이나 프록시
+  `define_method`를 사용한다. 만약 `method_missing`을 사용해야 한다면:
 <sup>[[link](#no-method-missing)]</sup>
 
-  - Be sure to [also define `respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
-  - Only catch methods with a well-defined prefix, such as `find_by_*` -- make your code as assertive as possible.
-  - Call `super` at the end of your statement
-  - Delegate to assertive, non-magical methods:
+  - [`respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)도
+    정의해야 한다.
+  - `find_by_*` 같은 잘 알려진 prefix를 가진 메소드만 잡는다 -- 가능한 한 코드를
+    단정적으로 만든다.
+  - 구문 끝에서 `super`를 호출한다.
+  - 일반 메소드에 단정적으로 위임한다.
 
     ```ruby
-    # bad
+    # 나쁜 예
     def method_missing?(meth, *params, &block)
       if /^find_by_(?<prop>.*)/ =~ meth
-        # ... lots of code to do a find_by
+        # ... find_by 하는 코드가 많이
       else
         super
       end
     end
 
-    # good
+    # 좋은 예
     def method_missing?(meth, *params, &block)
       if /^find_by_(?<prop>.*)/ =~ meth
         find_by(prop, *params, &block)
@@ -3631,47 +3529,99 @@ resource cleanup when possible.
       end
     end
 
-    # best of all, though, would to define_method as each findable attribute is declared
+    # 가장 좋은 것은 찾을 수 있는 모든 속성에 define_method를 선언하는 것이다.
     ```
 
 * <a name="prefer-public-send"></a>
-  Prefer `public_send` over `send` so as not to circumvent `private`/`protected` visibility.
+  `private`/`protected` 범위를 회피하지 않도록, `send`대신 `public_send`를
+  사용한다.
 <sup>[[link](#prefer-public-send)]</sup>
 
-## Misc
+  ```ruby
+  # Activatable concern을 인클루드하는 ActiveModel Organization이 있다
+  module Activatable
+    extend ActiveSupport::Concern
+
+    included do
+      before_create :create_token
+    end
+
+    private
+
+    def reset_token
+      ...
+    end
+
+    def create_token
+      ...
+    end
+
+    def activate!
+      ...
+    end
+  end
+
+  class Organization < ActiveRecord::Base
+    include Activatable
+  end
+
+  linux_organization = Organization.find(...)
+  # 나쁜 예 - 프라이버시 위반
+  linux_organization.send(:reset_token)
+  # 좋은 예 - 예외를 발생 시킴
+  linux_organization.public_send(:reset_token)
+  ```
+
+* <a name="prefer-__send__"></a>
+  `send`대신 `__send__`를 사용한다. `send`는 있는 메소드와 겹칠 수 있다.
+<sup>[[link](#prefer-__send__)]</sup>
+
+  ```ruby
+  require 'socket'
+
+  u1 = UDPSocket.new
+  u1.bind('127.0.0.1', 4913)
+  u2 = UDPSocket.new
+  u2.connect('127.0.0.1', 4913)
+  # 받을 객체에 메세지를 보내지 않음.
+  # 대신 UDP 소켓에 메세지를 보냄.
+  u2.send :sleep, 0
+  # 받을 객에세 메세지를 보냄.
+  u2.__send__ ...
+  ```
+
+## 그 밖에
 
 * <a name="always-warn"></a>
-  Write `ruby -w` safe code.
+  `ruby -w`로 안전한 코드를 작성한다.
 <sup>[[link](#always-warn)]</sup>
 
 * <a name="no-optional-hash-params"></a>
-  Avoid hashes as optional parameters. Does the method do too much? (Object
-  initializers are exceptions for this rule).
+  Optional 매개변수로 해시를 사용하지 않는다.(객체 생성자는 이 규칙에서 예외다.)
 <sup>[[link](#no-optional-hash-params)]</sup>
 
 * <a name="short-methods"></a>
-  Avoid methods longer than 10 LOC (lines of code). Ideally, most methods will
-  be shorter than 5 LOC. Empty lines do not contribute to the relevant LOC.
+  메소드는 10줄을 넘지 않게 하라. 이상적으로 대부분의 메소드는 5줄 이하여야 한다.
+  빈 줄은 제외한다.
 <sup>[[link](#short-methods)]</sup>
 
 * <a name="too-many-params"></a>
-  Avoid parameter lists longer than three or four parameters.
+  3개 또는 4개 이상의 매개변수 리스트는 사용하지 않는다.
 <sup>[[link](#too-many-params)]</sup>
 
 * <a name="private-global-methods"></a>
-  If you really need "global" methods, add them to Kernel and make them
-  private.
+  전역 메소드가 정말로 필요하다면 private으로 만들고 Kernel에 추가하라.
 <sup>[[link](#private-global-methods)]</sup>
 
 * <a name="instance-vars"></a>
-  Use module instance variables instead of global variables.
+  전역 변수 대신에 모듈 변수를 사용하라.
 <sup>[[link](#instance-vars)]</sup>
 
   ```Ruby
-  # bad
+  # 나쁜 예
   $foo_bar = 1
 
-  # good
+  # 좋은 예
   module Foo
     class << self
       attr_accessor :bar
@@ -3682,97 +3632,94 @@ resource cleanup when possible.
   ```
 
 * <a name="optionparser"></a>
-  Use `OptionParser` for parsing complex command line options and `ruby -s`
-  for trivial command line options.
+  복잡한 명령어 라인에서 인수를 가져올 때 `OptionParser`를 사용하고 간단한 옵션은
+  `ruby -s`를 사용한다.
 <sup>[[link](#optionparser)]</sup>
 
 * <a name="time-now"></a>
-  Prefer `Time.now` over `Time.new` when retrieving the current system time.
+  현재 시스템 시간을 가져올 때 `Time.new` 대신 `Time.now`를 사용하라.
 <sup>[[link](#time-now)]</sup>
 
 * <a name="functional-code"></a>
-  Code in a functional way, avoiding mutation when that makes sense.
+  코드에서 되도록 변경을 피하고 함수형 방식을 사용하라.
 <sup>[[link](#functional-code)]</sup>
 
 * <a name="no-param-mutations"></a>
-  Do not mutate parameters unless that is the purpose of the method.
+  메소드의 목적이 매개변수의 수정이 아닌 경우 매개변수를 수정하면 안 된다.
 <sup>[[link](#no-param-mutations)]</sup>
 
 * <a name="three-is-the-number-thou-shalt-count"></a>
-  Avoid more than three levels of block nesting.
+  블록 안에 3단 이상의 블록을 포함하지 마라.
 <sup>[[link](#three-is-the-number-thou-shalt-count)]</sup>
 
 * <a name="be-consistent"></a>
-  Be consistent. In an ideal world, be consistent with these guidelines.
+  일관성을 지켜라. 이 가이드 라인을 가지고 일관성을 유지하는 것이 이상적이다.
 <sup>[[link](#be-consistent)]</sup>
 
 * <a name="common-sense"></a>
-  Use common sense.
+  상식에 맞게 하라.
 <sup>[[link](#common-sense)]</sup>
 
-## Tools
+## 도구들
 
-Here are some tools to help you automatically check Ruby code against
-this guide.
+이 가이드를 대신해서 자동으로 루비 코드를 체크해주는 도구들이 몇 가지 있다.
 
 ### RuboCop
 
-[RuboCop][] is a Ruby code style
-checker based on this style guide. RuboCop already covers a
-significant portion of the Guide, supports both MRI 1.9 and MRI 2.0
-and has good Emacs integration.
+[RuboCop][]은 이 가이드를 기반으로 해서 루비 코드 스타일을 체크해준다. 이
+가이드의 상당 부분을 커버하는 RuboCop은 MRI 1.9와 MRI 2.0을 지원하고 Emacs와
+통합에 좋다.
 
 ### RubyMine
 
-[RubyMine](http://www.jetbrains.com/ruby/)'s code inspections are
-[partially based](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-on this guide.
+[RubyMine](http://www.jetbrains.com/ruby/)의 코드 인스펙션은
+[부분적으로](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
+이 가이드에 기반한다.
 
-# Contributing
+# 참여하기
 
-The guide is still a work in progress - some rules are lacking examples, some
-rules don't have examples that illustrate them clearly enough. Improving such rules
-is a great (and simple way) to help the Ruby community!
+이 가이드는 아직 완성되지 않았다. - 몇 가지 규칙은 예제가 없고, 몇 가지 규칙은
+충분하고 명확한 설명이 없다. 그런 규칙을 보완해 루비 커뮤니티를 훌륭히(또 간단히)
+도울 수 있다.
 
-In due time these issues will (hopefully) be addressed - just keep them in mind
-for now.
+(바라건대)이러한 문제들은 곧 해결될 것이다. - 일단 그렇다는 걸 기억하고 있으면
+된다.
 
-Nothing written in this guide is set in stone. It's my desire to work
-together with everyone interested in Ruby coding style, so that we could
-ultimately create a resource that will be beneficial to the entire Ruby
-community.
+이 가이드는 확정된 가이드가 아니다. 나는 루비 코딩 스타일에 흥미를 가지고 있는
+사람들과 함께 만들어가고 싶다. 그래서 모든 루비 커뮤니티에서 유용하게 사용될
+자료로 사용되면 좋겠다.
 
-Feel free to open tickets or send pull requests with improvements. Thanks in
-advance for your help!
+개선을 위해서 티켓을 열거나 풀 리퀘스트를 마음껏 보내라. 당신의 도움에 미리
+감사한다!
 
-You can also support the project (and RuboCop) with financial
-contributions via [gittip](https://www.gittip.com/bbatsov).
+또 이 프로젝트(와 RuboCop)에 금전적인 기부는 [Gratipay](https://gratipay.com/~bbatsov/)를
+통해서 할 수 있다.
 
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
+[![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.png)](https://gratipay.com/~bbatsov/)
 
-## How to Contribute?
+## 어떻게 참여하나요?
 
-It's easy, just follow the [contribution guidelines](https://github.com/bbatsov/ruby-style-guide/blob/master/CONTRIBUTING.md).
+[contribution guidelines](https://github.com/bbatsov/ruby-style-guide/blob/master/CONTRIBUTING.md)을
+따라서 하면 쉽다!
 
-# License
+# 라이센스
 
 ![Creative Commons License](http://i.creativecommons.org/l/by/3.0/88x31.png)
-This work is licensed under a [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/deed.en_US)
+[Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/deed.en_US)에
+따라 이용가능하다.
 
-# Spread the Word
+# 공유합시다!
 
-A community-driven style guide is of little use to a community that
-doesn't know about its existence. Tweet about the guide, share it with
-your friends and colleagues. Every comment, suggestion or opinion we
-get makes the guide just a little bit better. And we want to have the
-best possible guide, don't we?
+커뮤니티 기반 스타일 가이드는 이걸 모르는 곳에서는 거의 쓸모가 없다. 이 가이드를
+친구나 동료에게 트윗하거나 공유하라. 우리가 받는 모든 댓글이나 의견, 제안은 이
+가이드를 좀 더 좋게 만들 수 있다. 더 좋은 가이드를 가지고 싶지 않은가?
 
-Cheers,<br>
+화이팅,<br>
 [Bozhidar](https://twitter.com/bbatsov)
 
-[PEP-8]: http://www.python.org/dev/peps/pep-0008/
+[PEP-8]: https://www.python.org/dev/peps/pep-0008/
 [rails-style-guide]: https://github.com/bbatsov/rails-style-guide
-[pickaxe]: http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0
+[pickaxe]: https://pragprog.com/book/ruby4/programming-ruby-1-9-2-0
 [trpl]: http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177
-[transmuter]: https://github.com/TechnoGate/transmuter
+[transmuter]: https://github.com/kalbasit/transmuter
 [RuboCop]: https://github.com/bbatsov/rubocop
