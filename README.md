@@ -1,6 +1,7 @@
 # 서론
 
-이 문서는 휴레이 웹 개발자를 위한 루비 코딩 스타일 가이드입니다. https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md 사이트를 참고했습니다. 코드 가독성을 우선하기 때문에 참고 사이트의 "나쁜 예"에 해당하는 스타일도 허용합니다.
+이 문서는 휴레이 웹 개발자를 위한 루비 코딩 스타일 가이드입니다. 
+https://github.com/dalzony/ruby-style-guide/blob/master/README-koKR.md 사이트를 참고했습니다. 코드 가독성을 우선하기 때문에 참고 사이트의 "나쁜 예"에 해당하는 스타일도 허용합니다.
 
 ## Table of Contents
 
@@ -2866,7 +2867,7 @@
 <sup>[[link](#percent-w)]</sup>
 
   ```Ruby
-  # 나쁜 예
+  # 허용되는 예(**휴레이**)
   STATES = ['draft', 'open', 'closed']
 
   # 좋은 예
@@ -2927,7 +2928,7 @@
 <sup>[[link](#set-vs-array)]</sup>
 
 * <a name="symbols-as-keys"></a>
-  해시 키는 문자열 보다 심볼을 사용하는 것이 좋다.
+  해시 키는 문자열 보다 심볼을 사용하는 것이 좋지만 경우에 따라 혼용 가능하다. (**휴레이**)
 <sup>[[link](#symbols-as-keys)]</sup>
 
   ```Ruby
@@ -2955,8 +2956,8 @@
   ```
 
 * <a name="no-mixed-hash-syntaces"></a>
-  하나의 해시에 루비 1.9 해시 문법과 기존 해시 문법을 섞어 쓰지 마라. 심볼이
-  아닌 키가 포함되어 있다면 이전의 해시 문법을 사용하라.
+  하나의 해시에 루비 1.9 해시 문법과 기존 해시 문법을 섞어 쓰지 않는 것이 권고이나, 경우에 따라 혼용할 수 있다. (**휴레이**). 
+  심볼이 아닌 키가 포함되어 있다면 이전의 해시 문법을 사용하라.
 <sup>[[link](#no-mixed-hash-syntaces)]</sup>
 
   ```Ruby
